@@ -21,12 +21,13 @@ private Transaction transaction;
     }
 
     @Override
-    public void removeAdres(Adres adres, SessionFactory sessionFactory) {
+    public void removeAdres(int id, SessionFactory sessionFactory) {
          session= sessionFactory.getCurrentSession();
          transaction = session.beginTransaction();
-         session.delete(adres);
-         transaction.commit();
-         session.close();
+        Adres adres = (Adres) session.get(Adres.class, id);
+        session.delete(adres);
+        transaction.commit();
+        session.close();
     }
 
     @Override
@@ -39,7 +40,7 @@ private Transaction transaction;
     }
 
     @Override
-    public Adres getAdres(String id, SessionFactory sessionFactory) {
+    public Adres getAdres(int id, SessionFactory sessionFactory) {
         session= sessionFactory.getCurrentSession();
         transaction = session.beginTransaction();
         Adres adres = (Adres) session.get(Adres.class, id);
