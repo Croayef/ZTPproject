@@ -1,34 +1,39 @@
 package DAO;
 
 import DAOInterfaces.AdresDAOInterface;
+import POJO.Adres;
+import java.util.List;
 import org.hibernate.SessionFactory;
 
 
 public class AdresDAO implements AdresDAOInterface{
 
     @Override
-    public void addAdres() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void addAdres(Adres adres, SessionFactory session) {
+      session.getCurrentSession().save(adres);
+
     }
  
     @Override
-    public void removeAdres(int id, SessionFactory session) {
-       session.getCurrentSession()
+    public void removeAdres(Adres adres, SessionFactory session) {
+       session.getCurrentSession().delete(adres);
     }
 
     @Override
-    public void editAdres() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void editAdres(Adres adres, SessionFactory session) {
+        session.getCurrentSession().update(adres);
     }
 
     @Override
-    public void getAdres() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Adres getAdres(String id, SessionFactory session) {
+        Adres adres = (Adres) session.getCurrentSession().get(Adres.class, id);
+        return adres;
     }
 
     @Override
-    public void getEachAdres() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Adres> getEachAdres(SessionFactory session) {
+        List<Adres> adresses = (List<Adres>) session.getCurrentSession().createQuery("from Adres").list();
+        return adresses;
     }
 
 }
