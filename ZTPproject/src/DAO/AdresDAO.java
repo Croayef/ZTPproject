@@ -11,7 +11,7 @@ import org.hibernate.Transaction;
 public class AdresDAO implements AdresDAOInterface{
 private Session session;
 private Transaction transaction;
-    @Override
+
     public void addAdres(Adres adres, SessionFactory sessionFactory) {
     session= sessionFactory.getCurrentSession();
     transaction = session.beginTransaction();
@@ -20,7 +20,6 @@ private Transaction transaction;
     session.close();
     }
 
-    @Override
     public void removeAdres(Adres adres, SessionFactory sessionFactory) {
          session= sessionFactory.getCurrentSession();
          transaction = session.beginTransaction();
@@ -29,7 +28,6 @@ private Transaction transaction;
          session.close();
     }
 
-    @Override
     public void editAdres(Adres adres, SessionFactory sessionFactory) {
          session= sessionFactory.getCurrentSession();
          transaction = session.beginTransaction();
@@ -38,7 +36,6 @@ private Transaction transaction;
          session.close();
     }
 
-    @Override
     public Adres getAdres(String id, SessionFactory sessionFactory) {
         session= sessionFactory.getCurrentSession();
         transaction = session.beginTransaction();
@@ -48,7 +45,6 @@ private Transaction transaction;
         return adres;
     }
 
-    @Override
     public List<Adres> getEachAdres(SessionFactory sessionFactory) {
         session = sessionFactory.openSession();
         transaction = session.beginTransaction();
