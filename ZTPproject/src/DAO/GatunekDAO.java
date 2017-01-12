@@ -1,14 +1,56 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package DAO;
 
-/**
- *
- * @author Artur
- */
-public class GatunekDAO {
-    
+import POJO.Gatunek;
+
+import DAOInterfaces.GatunekDAOInterface;
+import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+
+public class GatunekDAO implements GatunekDAOInterface {
+
+    public void addGatunek(Gatunek gatunek, SessionFactory sessionFactory) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        session.save(gatunek);
+        transaction.commit();
+        session.close();
+    }
+
+    public void removeGatunek(int id, SessionFactory sessionFactory) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        Gatunek gatunek = (Gatunek) session.get(Gatunek.class, id);
+        session.delete(gatunek);
+        transaction.commit();
+        session.close();
+    }
+
+    public void editGatunek(Gatunek gatunek, SessionFactory sessionFactory) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        session.update(gatunek);
+        transaction.commit();
+        session.close();
+    }
+
+    public Gatunek getGatunek(int id, SessionFactory sessionFactory) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        Gatunek gatunek = (Gatunek) session.get(Gatunek.class, id);
+        transaction.commit();
+        session.close();
+        return gatunek;
+    }
+
+    public List<Gatunek> getEachGatunek(SessionFactory sessionFactory) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = session.beginTransaction();
+        List<Gatunek> genres = (List<Gatunek>) session.createCriteria(Gatunek.class).list();
+        transaction.commit();
+        session.close();
+        return genres;
+    }
+
 }
