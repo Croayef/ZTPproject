@@ -1,9 +1,18 @@
 package DAOInterfaces;
 
+import POJO.Pracownik;
+import java.util.List;
+import org.hibernate.SessionFactory;
+
 public interface PracownikDAOInterface {
-    public void addPracownik();
-    public void removePracownik();
-    public void editPracownik();
-    public void getPracownik();
-    public void getEachPracownik();      
+
+    public void addPracownik(Pracownik film, SessionFactory sessionFactory);
+
+    public void removePracownik(int id, SessionFactory sessionFactory);
+
+    public void editPracownik(Pracownik film, SessionFactory sessionFactory);
+
+    public Pracownik getPracownik(int id, SessionFactory sessionFactory);
+
+    public List<Pracownik> getEachPracownik(SessionFactory sessionFactory);
 }
