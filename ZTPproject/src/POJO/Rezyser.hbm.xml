@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-12-07 14:38:13 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="POJO.Rezyser" table="REZYSER" schema="ROOT" optimistic-lock="version">
+        <id name="idRezysera" type="int">
+            <column name="ID_REZYSERA" precision="5" scale="0" />
+            <generator class="increment" />
+        </id>
+        <property name="imie" type="string">
+            <column name="IMIE" length="20" />
+        </property>
+        <property name="nazwisko" type="string">
+            <column name="NAZWISKO" length="30" not-null="true" />
+        </property>
+        <property name="dataUrodzenia" type="date">
+            <column name="DATA_URODZENIA" length="10" />
+        </property>
+        <property name="dataZgonu" type="date">
+            <column name="DATA_ZGONU" length="10" />
+        </property>
+        <property name="pochodzenie" type="string">
+            <column name="POCHODZENIE" length="30" />
+        </property>
+    </class>
+</hibernate-mapping>

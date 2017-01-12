@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-12-07 14:38:13 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="POJO.Transakcja" table="TRANSAKCJA" schema="ROOT" optimistic-lock="version">
+        <id name="idTransakcji" type="int">
+            <column name="ID_TRANSAKCJI" precision="5" scale="0" />
+            <generator class="increment" />
+        </id>
+        <property name="idKlienta" type="java.lang.Integer">
+            <column name="ID_KLIENTA" precision="5" scale="0" />
+        </property>
+        <property name="idPracownika" type="java.lang.Integer">
+            <column name="ID_PRACOWNIKA" precision="5" scale="0" />
+        </property>
+        <property name="idFilmu" type="java.lang.Integer">
+            <column name="ID_FILMU" precision="5" scale="0" />
+        </property>
+        <property name="dataTransakcji" type="date">
+            <column name="DATA_TRANSAKCJI" length="10" />
+        </property>
+        <property name="typ" type="string">
+            <column name="TYP" length="10" />
+        </property>
+    </class>
+</hibernate-mapping>

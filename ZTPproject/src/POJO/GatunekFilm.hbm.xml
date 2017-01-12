@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-12-07 20:57:30 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="POJO.GatunekFilm" table="GATUNEK_FILM" schema="ROOT">
+        <composite-id name="id" class="POJO.GatunekFilmId">
+            <key-property name="idGatunku" type="int">
+                <column name="ID_GATUNKU" precision="5" scale="0" />
+            </key-property>
+            <key-property name="idFilmu" type="int">
+                <column name="ID_FILMU" precision="5" scale="0" />
+            </key-property>
+        </composite-id>
+    </class>
+</hibernate-mapping>

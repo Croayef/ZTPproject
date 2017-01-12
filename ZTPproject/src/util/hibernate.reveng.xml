@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-reverse-engineering-3.0.dtd">
+<hibernate-reverse-engineering>
+  <schema-selection match-schema="ROOT"/>
+  <table-filter match-name="GATUNEK_FILM"/>
+  <table-filter match-name="FILM"/>
+  <table-filter match-name="ADRES"/>
+  <table-filter match-name="KLIENT"/>
+  <table-filter match-name="TRANSAKCJA"/>
+  <table-filter match-name="STANOWISKO"/>
+  <table-filter match-name="PRACOWNIK"/>
+  <table-filter match-name="ODDZIAL"/>
+  <table-filter match-name="NOSNIK"/>
+  <table-filter match-name="GATUNEK"/>
+  <table-filter match-name="REZYSER"/>
+</hibernate-reverse-engineering>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-12-07 14:38:13 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="POJO.Film" table="FILM" schema="ROOT" optimistic-lock="version">
+        <id name="idFilmu" type="int">
+            <column name="ID_FILMU" precision="5" scale="0" />
+            <generator class="increment" />
+        </id>
+        <property name="tytul" type="string">
+            <column name="TYTUL" length="35" not-null="true" />
+        </property>
+        <property name="rokProdukcji" type="java.lang.Short">
+            <column name="ROK_PRODUKCJI" precision="4" scale="0" />
+        </property>
+        <property name="ilosc" type="java.lang.Long">
+            <column name="ILOSC" precision="10" scale="0" />
+        </property>
+        <property name="idRezysera" type="java.lang.Integer">
+            <column name="ID_REZYSERA" precision="5" scale="0" />
+        </property>
+        <property name="idNosnika" type="java.lang.Integer">
+            <column name="ID_NOSNIKA" precision="5" scale="0" />
+        </property>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 2016-12-07 14:38:13 by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="POJO.Oddzial" table="ODDZIAL" schema="ROOT" optimistic-lock="version">
+        <id name="idOddzialu" type="int">
+            <column name="ID_ODDZIALU" precision="5" scale="0" />
+            <generator class="increment" />
+        </id>
+        <property name="nazwa" type="string">
+            <column name="NAZWA" length="20" />
+        </property>
+        <property name="lokalizacja" type="string">
+            <column name="LOKALIZACJA" length="25" />
+        </property>
+    </class>
+</hibernate-mapping>
