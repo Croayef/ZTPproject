@@ -20,7 +20,7 @@ import javax.swing.table.DefaultTableModel;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import util.NewHibernateUtil;
+import util.HibernateUtil;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -766,7 +766,7 @@ public class NewJFrame extends javax.swing.JFrame {
         if (!logField.getText().trim().equals("") && pass.length() > 0) {
             loginError.setVisible(false);
             try {
-                session = NewHibernateUtil.getSessionFactory().openSession();
+                session = HibernateUtil.getSessionFactory().openSession();
                 List uzytkownicy;
                 session.beginTransaction();
 
@@ -781,7 +781,7 @@ public class NewJFrame extends javax.swing.JFrame {
                     moviesPanel.setVisible(true);
 
                 } else {
-                    session = NewHibernateUtil.getSessionFactory().openSession();
+                    session = HibernateUtil.getSessionFactory().openSession();
                     session.beginTransaction();
                     query = session.createQuery("from Pracownik  where login is '" + logField.getText() + "' and haslo is '" + pass + "'");
                     uzytkownicy = query.list();
@@ -837,7 +837,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
             List carriers = null, directors = null, genres = null;
             newMovieCarrier.removeAllItems();
-            session = NewHibernateUtil.getSessionFactory().openSession();
+            session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             Query q = session.createQuery("from Nosnik order by idNosnika");
             carriers = q.list();
@@ -882,7 +882,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
         int id = Integer.parseInt(removeMovieTable.getModel().getValueAt(removeMovieTable.getSelectedRow(), 0).toString());
         try {
-            session = NewHibernateUtil.getSessionFactory().openSession();
+            session = HibernateUtil.getSessionFactory().openSession();
             
             session.beginTransaction();
             Query query = session.createQuery("delete GatunekFilm where id.idFilmu =:id");
@@ -914,7 +914,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private void reloadRemoveMoviesTable() {
 
         removeMoviePanel.setVisible(true);
-        session = NewHibernateUtil.getSessionFactory().openSession();
+        session = HibernateUtil.getSessionFactory().openSession();
         List moviesList = null, directorList = null;
         removeMovieTable.removeAll();
         try {
@@ -936,7 +936,7 @@ public class NewJFrame extends javax.swing.JFrame {
         tableHeaders.add("Nośnik");
         tableHeaders.add("Dostępność");
         if (!moviesList.isEmpty()) {
-            session = NewHibernateUtil.getSessionFactory().openSession();
+            session = HibernateUtil.getSessionFactory().openSession();
             Film film;
             session.beginTransaction();
             Query q;
@@ -980,7 +980,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private void orderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderButtonActionPerformed
         if (moviesTable.getSelectedRow() != -1) {
             if (moviesTable.getValueAt(moviesTable.getSelectedRow(), 4).toString().equalsIgnoreCase("Dostępny")) {
-                session = NewHibernateUtil.getSessionFactory().openSession();
+                session = HibernateUtil.getSessionFactory().openSession();
                 try {
 
                     Transakcja t;
@@ -1015,7 +1015,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private void acceptTransactionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acceptTransactionButtonActionPerformed
         if (transactionTable.getSelectedRow() != -1) {
             if (transactionTable.getValueAt(transactionTable.getSelectedRow(), 3).toString().equalsIgnoreCase("Wypożyczenie")) {
-                session = NewHibernateUtil.getSessionFactory().openSession();
+                session = HibernateUtil.getSessionFactory().openSession();
                 try {
 
                     session.beginTransaction();
@@ -1043,7 +1043,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private void declineTransactionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_declineTransactionButtonActionPerformed
         if (transactionTable.getSelectedRow() != -1) {
             if (transactionTable.getValueAt(transactionTable.getSelectedRow(), 3).toString().equalsIgnoreCase("Wypożyczenie")) {
-                session = NewHibernateUtil.getSessionFactory().openSession();
+                session = HibernateUtil.getSessionFactory().openSession();
                 try {
 
                     session.beginTransaction();
@@ -1067,7 +1067,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void showTransactions() {
         List transactionList = null, filmList = null;
-        session = NewHibernateUtil.getSessionFactory().openSession();
+        session = HibernateUtil.getSessionFactory().openSession();
         try {
 
             session.beginTransaction();
@@ -1084,7 +1084,7 @@ public class NewJFrame extends javax.swing.JFrame {
             tableHeaders.add("Data Transakcji");
             tableHeaders.add("Typ");
             if (!transactionList.isEmpty()) {
-                session = NewHibernateUtil.getSessionFactory().openSession();
+                session = HibernateUtil.getSessionFactory().openSession();
                 Transakcja transakcja;
                 session.beginTransaction();
 
@@ -1132,7 +1132,7 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void addGenreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addGenreButtonActionPerformed
         // TODO add your handling code here:
-        session = NewHibernateUtil.getSessionFactory().openSession();
+        session = HibernateUtil.getSessionFactory().openSession();
         newGenreNotify.setVisible(false);
 
         if (newGenreName.getText().trim().equals("")) {
@@ -1189,7 +1189,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private void reloadRemoveGenresTable(){
         
         removeGenrePanel.setVisible(true);
-        session = NewHibernateUtil.getSessionFactory().openSession();
+        session = HibernateUtil.getSessionFactory().openSession();
         List genres = null;
         removeGenreTable.removeAll();
         try {
@@ -1228,7 +1228,7 @@ public class NewJFrame extends javax.swing.JFrame {
         
         int id = Integer.parseInt(removeGenreTable.getModel().getValueAt(removeGenreTable.getSelectedRow(), 0).toString());
         try {
-            session = NewHibernateUtil.getSessionFactory().openSession();
+            session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             Query query = session.createQuery("delete Gatunek where idGatunku =:id");
             query.setParameter("id", id);
@@ -1255,7 +1255,7 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_removeGenreButtonActionPerformed
 
     private void addMovieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMovieButtonActionPerformed
-        session = NewHibernateUtil.getSessionFactory().openSession();
+        session = HibernateUtil.getSessionFactory().openSession();
         newMovieError.setVisible(false);
         addMovieSuccess.setVisible(false);
         if (newMovieTitle.getText().trim().equals("")
@@ -1311,7 +1311,7 @@ public class NewJFrame extends javax.swing.JFrame {
      
           int id = Integer.parseInt(moviesTable.getModel().getValueAt(moviesTable.getSelectedRow(), 0).toString());
           try {
-              session = NewHibernateUtil.getSessionFactory().openSession();
+              session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             Query q = session.createQuery("from Film where idFilmu IS " + id);
             film= (Film) q.list().get(0);
@@ -1352,7 +1352,7 @@ info.setVisible(true);
         moviesTable.removeAll();
         List moviesList = null, directorList = null;
         try {
-            session = NewHibernateUtil.getSessionFactory().openSession();
+            session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             Query q = session.createQuery("from Film");
             moviesList = q.list();
