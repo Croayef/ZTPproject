@@ -1,6 +1,8 @@
 package windows;
 
-public class MovieWindow implements CustomWindowInterface {
+import javax.swing.JPanel;
+
+public class MovieWindow extends JPanel implements CustomWindowInterface {
     
     private static MovieWindow instance;
 

@@ -1,6 +1,8 @@
 package windows;
 
-public class CarrierWindow implements CustomWindowInterface {
+import javax.swing.JPanel;
+
+public class CarrierWindow extends JPanel implements CustomWindowInterface {
     private static CarrierWindow instance;
 
     private CarrierWindow() {

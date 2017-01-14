@@ -1,6 +1,8 @@
 package windows;
 
-public class DirectorWindow implements CustomWindowInterface {
+import javax.swing.JPanel;
+
+public class DirectorWindow extends JPanel implements CustomWindowInterface {
 
     private static DirectorWindow instance;
 

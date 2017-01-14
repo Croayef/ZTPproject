@@ -1,6 +1,8 @@
 package windows;
 
-public class GenreWindow implements CustomWindowInterface {
+import javax.swing.JPanel;
+
+public class GenreWindow extends JPanel implements CustomWindowInterface {
 
     private static GenreWindow instance;
 
