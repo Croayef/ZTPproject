@@ -106,4 +106,9 @@ public class ShowMovieWindow  extends JPanel implements CustomWindowInterface {
     public JButton getshowmovieButton() {
         return showMovieButton;
     }
+    
+    public JTable getShowMovieTable()
+    {
+        return moviesTable;
+    }
 }
