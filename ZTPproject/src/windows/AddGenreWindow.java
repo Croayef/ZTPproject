@@ -19,13 +19,14 @@ public class AddGenreWindow extends JPanel implements CustomWindowInterface {
     private JButton addGenreButton;
 
     private AddGenreWindow() {
-        System.out.println("windows.AddGenreWindow.<init>()");
         this.setLayout(new GridBagLayout());
         this.setBorder(BorderFactory.createTitledBorder("Dodaj Gatunek"));
+        
         nameLabel = new JLabel("Nazwa: ");
         newGenreName = new JTextField(20);
         addGenreButton = new JButton("Dodaj");
         outcomeLabel = new JLabel();
+        
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(10, 10, 10, 10);
