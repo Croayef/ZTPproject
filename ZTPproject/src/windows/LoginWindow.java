@@ -19,11 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-/**
- *
- * @author menf
- */
-public class LoginWindow extends JPanel {
+public class LoginWindow extends JPanel implements CustomWindowInterface {
     
        private static LoginWindow instance;
        private JPasswordField passField;

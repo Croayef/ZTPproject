@@ -20,7 +20,7 @@ import javax.swing.JTable;
  *
  * @author menf
  */
-public class RemoveMovieWindow extends JPanel {
+public class RemoveMovieWindow extends JPanel implements CustomWindowInterface{
     
     private static RemoveMovieWindow instance;
     private JLabel removemovieError;

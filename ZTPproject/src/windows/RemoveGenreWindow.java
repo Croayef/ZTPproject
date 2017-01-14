@@ -20,7 +20,7 @@ import javax.swing.JTable;
  *
  * @author menf
  */
-public class RemoveGenreWindow extends JPanel {
+public class RemoveGenreWindow extends JPanel implements CustomWindowInterface {
     
     private static RemoveGenreWindow instance;
     private JLabel removegenreLabel;
