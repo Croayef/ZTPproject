@@ -86,6 +86,10 @@ public class LoginWindow extends JPanel {
         BorderFactory.createEtchedBorder(), "LOGOWANIE"));
     }
 
+    public JLabel getErrorField() {
+        return errorField;
+    }
+
 
     
     public static LoginWindow getInstance() {

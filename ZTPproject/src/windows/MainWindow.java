@@ -15,6 +15,7 @@ public class MainWindow extends JFrame {
 
     private static int view = 0;
     JPanel cards;
+    private RemoveMovieWindow window= RemoveMovieWindow.getInstance();
     final static String FIRSTCARD = "Card1";
     final static String SECONDCARD = "Card2";
 
@@ -43,11 +44,11 @@ public class MainWindow extends JFrame {
 
         JPanel card2 = new JPanel();
         card2.add(new JTextField("TextField", 20));
-
+ JPanel card3 = window;
+ card3.revalidate();
         cards = new JPanel(new CardLayout());
         cards.add(card1, FIRSTCARD);
-        cards.add(card2, SECONDCARD);
-
+        cards.add(card3, SECONDCARD);
         pane.add(comboBoxPane, BorderLayout.PAGE_START);
         pane.add(cards, BorderLayout.CENTER);
     }
