@@ -11,7 +11,6 @@ public class GenreWindow extends JPanel implements CustomWindowInterface {
         //robimy okienko ale jeszcze nie wiem jak
     }
 
-    ;
     
     public static GenreWindow getInstance() {
         if (instance == null) {

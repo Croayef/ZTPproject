@@ -11,7 +11,6 @@ public class DirectorWindow extends JPanel implements CustomWindowInterface {
         //robimy okienko ale jeszcze nie wiem jak
     }
 
-    ;
     
     public static DirectorWindow getInstance() {
         if (instance == null) {
