@@ -2,17 +2,13 @@ package windows;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
-import java.util.Locale;
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 
 public class AddGenreWindow extends JPanel implements CustomWindowInterface {
 
@@ -57,11 +53,10 @@ public class AddGenreWindow extends JPanel implements CustomWindowInterface {
         }
         return instance;
     }
-    
-    public JButton getAddGenreButton(){
+
+    public JButton getAddGenreButton() {
         return this.addGenreButton;
     }
-    
 
     public static void main(String[] args) {
         JFrame window = new JFrame();
