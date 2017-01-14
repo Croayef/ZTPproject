@@ -58,8 +58,8 @@ public class LoginWindow extends JPanel {
         this.add(logField,constraints);
         
         // PASSWORD LABEL
-        constraints.gridx=0;
-        constraints.gridy=1;
+        constraints.gridx=0; 
+       constraints.gridy=1;
         this.add(passLabel,constraints);
         
         // PASSWORD FIELD
@@ -94,6 +94,10 @@ public class LoginWindow extends JPanel {
         }
         return instance;
     } 
+
+    public JButton getLoginButton() {
+        return loginButton;
+    }
     
     
     
