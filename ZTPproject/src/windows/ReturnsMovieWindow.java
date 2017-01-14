@@ -24,7 +24,7 @@ public class ReturnsMovieWindow extends JPanel implements CustomWindowInterface 
     public ReturnsMovieWindow()
     {
         scrollPane = new JScrollPane();
-        returnsMovieButton = new JButton("Zamów");    
+        returnsMovieButton = new JButton("Zwróć");    
         returnsmoviesTable = new javax.swing.JTable();
         returnsmoviesTable.setAutoCreateRowSorter(true);
         returnsmoviesTable.setModel(
