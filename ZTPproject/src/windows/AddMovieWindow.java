@@ -6,7 +6,6 @@ import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -35,7 +34,7 @@ public class AddMovieWindow extends JPanel implements CustomWindowInterface {
     private AddMovieWindow() {
         this.setLayout(new GridBagLayout());
         this.setBorder(BorderFactory.createTitledBorder("Dodaj Film"));
-        
+
         nameLabel = new JLabel("Nazwa: ");
         yearLabel = new JLabel("Rok produkcji: ");
         quantityLabel = new JLabel("Ilość: ");
@@ -53,11 +52,10 @@ public class AddMovieWindow extends JPanel implements CustomWindowInterface {
         outcomeLabel = new JLabel("Outcome!");
         outcomeLabel.setVisible(false);
         setComponensPositions();
-        
 
     }
 
-    private void setComponensPositions(){
+    private void setComponensPositions() {
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(10, 10, 10, 10);
@@ -124,8 +122,7 @@ public class AddMovieWindow extends JPanel implements CustomWindowInterface {
         constraints.anchor = GridBagConstraints.CENTER;
         this.add(outcomeLabel, constraints);
     }
-    
-    
+
     public static AddMovieWindow getInstance() {
         if (instance == null) {
             instance = new AddMovieWindow();
@@ -140,14 +137,4 @@ public class AddMovieWindow extends JPanel implements CustomWindowInterface {
     public JButton getAddMovieButton() {
         return this.addMovieButton;
     }
-
-    public static void main(String[] args) {
-        JFrame window = new JFrame();
-        window.setSize(750, 500);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.add(AddMovieWindow.getInstance());
-        window.setResizable(true);
-        window.setVisible(true);
-    }
-
 }

@@ -1,7 +1,6 @@
 package DAO;
 
 import DAOInterfaces.PracownikDAOInterface;
-import POJO.Film;
 import POJO.Pracownik;
 import java.util.List;
 import org.hibernate.Session;
@@ -52,5 +51,5 @@ public class PracownikDAO implements PracownikDAOInterface {
         session.close();
         return employees;
     }
-    
+
 }

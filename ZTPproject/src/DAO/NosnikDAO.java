@@ -1,22 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package DAO;
+
 import DAOInterfaces.NosnikDAOInterface;
 import POJO.Nosnik;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-/**
- *
- * @author Artur
- */
+
 public class NosnikDAO implements NosnikDAOInterface {
 
-    @Override
     public void addNosnik(Nosnik nosnik, SessionFactory sessionFactory) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -25,7 +17,6 @@ public class NosnikDAO implements NosnikDAOInterface {
         session.close();
     }
 
-    @Override
     public void removeNosnik(int id, SessionFactory sessionFactory) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -35,7 +26,6 @@ public class NosnikDAO implements NosnikDAOInterface {
         session.close();
     }
 
-    @Override
     public void editNosnik(Nosnik nosnik, SessionFactory sessionFactory) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -44,7 +34,6 @@ public class NosnikDAO implements NosnikDAOInterface {
         session.close();
     }
 
-    @Override
     public Nosnik getNosnik(int id, SessionFactory sessionFactory) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -54,7 +43,6 @@ public class NosnikDAO implements NosnikDAOInterface {
         return nosnik;
     }
 
-    @Override
     public List<Nosnik> getEachNosnik(SessionFactory sessionFactory) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -63,6 +51,4 @@ public class NosnikDAO implements NosnikDAOInterface {
         session.close();
         return nosniki;
     }
-
-    
 }

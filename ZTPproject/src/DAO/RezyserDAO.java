@@ -1,4 +1,5 @@
 package DAO;
+
 import DAOInterfaces.RezyserDAOInterface;
 import POJO.Rezyser;
 import java.util.List;
@@ -8,7 +9,6 @@ import org.hibernate.Transaction;
 
 public class RezyserDAO implements RezyserDAOInterface {
 
-    @Override
     public void addRezyser(Rezyser rezyser, SessionFactory sessionFactory) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -17,7 +17,6 @@ public class RezyserDAO implements RezyserDAOInterface {
         session.close();
     }
 
-    @Override
     public void removeRezyser(int id, SessionFactory sessionFactory) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -27,7 +26,6 @@ public class RezyserDAO implements RezyserDAOInterface {
         session.close();
     }
 
-    @Override
     public void editRezyser(Rezyser rezyser, SessionFactory sessionFactory) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -36,7 +34,6 @@ public class RezyserDAO implements RezyserDAOInterface {
         session.close();
     }
 
-    @Override
     public Rezyser getRezyser(int id, SessionFactory sessionFactory) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -46,7 +43,6 @@ public class RezyserDAO implements RezyserDAOInterface {
         return rezyser;
     }
 
-    @Override
     public List<Rezyser> getEachRezyser(SessionFactory sessionFactory) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
@@ -55,10 +51,4 @@ public class RezyserDAO implements RezyserDAOInterface {
         session.close();
         return rezysers;
     }
-
-   
-
-   
-
-    
 }

@@ -1,14 +1,13 @@
 package DAO;
 
 import DAOInterfaces.OddzialDAOInterface;
-import POJO.Film;
 import POJO.Oddzial;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-public class OddzialDAO implements OddzialDAOInterface{
+public class OddzialDAO implements OddzialDAOInterface {
 
     public void addOddzial(Oddzial oddzial, SessionFactory sessionFactory) {
         Session session = sessionFactory.openSession();
@@ -52,5 +51,4 @@ public class OddzialDAO implements OddzialDAOInterface{
         session.close();
         return departaments;
     }
-    
 }

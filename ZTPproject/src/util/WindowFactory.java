@@ -1,32 +1,29 @@
 package util;
 
-import windows.CarrierWindow;
-import windows.CarrierWindow;
+import windows.AddMovieWindow;
 import windows.CustomWindowInterface;
-import windows.CustomWindowInterface;
-import windows.DirectorWindow;
-import windows.DirectorWindow;
-import windows.GenreWindow;
-import windows.GenreWindow;
-import windows.MovieWindow;
-import windows.MovieWindow;
+import windows.RemoveGenreWindow;
+import windows.RemoveMovieWindow;
+import windows.ShowMovieWindow;
+import windows.TransactionWindow;
 
 public class WindowFactory {
 
     public CustomWindowInterface getWindow(String windowType) {
-        switch(windowType.toUpperCase()){
-            case "FILM":
-                return MovieWindow.getInstance();
-            case "REZYSER":
-                return DirectorWindow.getInstance();
-            case "NOSNIK":
-                return CarrierWindow.getInstance();                
-            case "GATUNEK":
-                return GenreWindow.getInstance();
+        switch (windowType.toUpperCase()) {
+            case "ADD_MOVIE":
+                return AddMovieWindow.getInstance();
+            case "SHOW_MOVIE":
+                return ShowMovieWindow.getInstance();
+            case "REMOVE_MOVIE":
+                return RemoveMovieWindow.getInstance();
+            case "REMOVE_GENRE":
+                return RemoveGenreWindow.getInstance();
+            case "TRANSACTION":
+                return TransactionWindow.getInstance();
             default:
                 return null;
         }
-        
-    }
 
+    }
 }

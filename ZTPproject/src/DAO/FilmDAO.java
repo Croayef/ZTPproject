@@ -51,5 +51,4 @@ public class FilmDAO implements FilmDAOInterface {
         session.close();
         return movies;
     }
-
 }

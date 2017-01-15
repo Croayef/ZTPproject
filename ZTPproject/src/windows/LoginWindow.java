@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package windows;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import java.awt.GridBagLayout;
@@ -20,48 +14,47 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class LoginWindow extends JPanel implements CustomWindowInterface {
-    
-       private static LoginWindow instance;
-       private JPasswordField passField;
-       private JButton loginButton;
-       private JTextField logField;
-       private Label loginLabel;
-       private Label passLabel;
-       private Label headerLabel;
-       private JLabel errorField;
-       
+
+    private static LoginWindow instance;
+    private JPasswordField passField;
+    private JButton loginButton;
+    private JTextField logField;
+    private Label loginLabel;
+    private Label passLabel;
+    private JLabel errorField;
+
     private LoginWindow() {
-        
+
         loginLabel = new Label("Login:");//
         passField = new JPasswordField(20);//
         loginButton = new JButton("Login");//
         logField = new JTextField(20);//
         passLabel = new Label("Hasło:");//
         errorField = new JLabel("Bląd uwierzytelniania");
-        
+
         this.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(10, 10, 10, 10);
-        
+
         // LOGIN LABEL
-        constraints.gridx=0;
-        constraints.gridy=0;
-        this.add(loginLabel,constraints);
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        this.add(loginLabel, constraints);
 
         // LOGIN FIELD
-        constraints.gridx=1;
-        this.add(logField,constraints);
-        
+        constraints.gridx = 1;
+        this.add(logField, constraints);
+
         // PASSWORD LABEL
-        constraints.gridx=0; 
-       constraints.gridy=1;
-        this.add(passLabel,constraints);
-        
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        this.add(passLabel, constraints);
+
         // PASSWORD FIELD
-        constraints.gridx=1;
-        this.add(passField,constraints);
-        
+        constraints.gridx = 1;
+        this.add(passField, constraints);
+
         // ERROR LABEL
         constraints.gridx = 0;
         constraints.gridy = 2;
@@ -69,37 +62,31 @@ public class LoginWindow extends JPanel implements CustomWindowInterface {
         this.add(errorField, constraints);
         errorField.setVisible(true);
         errorField.setForeground(new Color(255, 0, 51));
-        
+
         // LOGIN BUTTON
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 2;
         constraints.anchor = GridBagConstraints.LAST_LINE_END;
         this.add(loginButton, constraints);
-        
+
         // BORDER
         this.setBorder(BorderFactory.createTitledBorder(
-        BorderFactory.createEtchedBorder(), "LOGOWANIE"));
+                BorderFactory.createEtchedBorder(), "LOGOWANIE"));
     }
 
     public JLabel getErrorField() {
         return errorField;
     }
 
-
-    
     public static LoginWindow getInstance() {
         if (instance == null) {
             instance = new LoginWindow();
         }
         return instance;
-    } 
+    }
 
     public JButton getLoginButton() {
         return loginButton;
     }
-    
-    
-    
-    
 }

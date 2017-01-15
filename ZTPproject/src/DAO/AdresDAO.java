@@ -7,48 +7,45 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+public class AdresDAO implements AdresDAOInterface {
 
-public class AdresDAO implements AdresDAOInterface{
-private Session session;
-private Transaction transaction;
-@Override
+    private Session session;
+    private Transaction transaction;
+
     public void addAdres(Adres adres, SessionFactory sessionFactory) {
-    session= sessionFactory.getCurrentSession();
-    transaction = session.beginTransaction();
-    session.save(adres);
-    transaction.commit();
-    session.close();
+        session = sessionFactory.getCurrentSession();
+        transaction = session.beginTransaction();
+        session.save(adres);
+        transaction.commit();
+        session.close();
     }
 
-    @Override
     public void removeAdres(int id, SessionFactory sessionFactory) {
-         session= sessionFactory.getCurrentSession();
-         transaction = session.beginTransaction();
+        session = sessionFactory.getCurrentSession();
+        transaction = session.beginTransaction();
         Adres adres = (Adres) session.get(Adres.class, id);
         session.delete(adres);
         transaction.commit();
         session.close();
     }
-@Override
+
     public void editAdres(Adres adres, SessionFactory sessionFactory) {
-         session= sessionFactory.getCurrentSession();
-         transaction = session.beginTransaction();
-         session.update(adres);
-         transaction.commit();
-         session.close();
+        session = sessionFactory.getCurrentSession();
+        transaction = session.beginTransaction();
+        session.update(adres);
+        transaction.commit();
+        session.close();
     }
 
-
-    @Override
     public Adres getAdres(int id, SessionFactory sessionFactory) {
-        session= sessionFactory.getCurrentSession();
+        session = sessionFactory.getCurrentSession();
         transaction = session.beginTransaction();
         Adres adres = (Adres) session.get(Adres.class, id);
         transaction.commit();
         session.close();
         return adres;
     }
-  @Override
+
     public List<Adres> getEachAdres(SessionFactory sessionFactory) {
         session = sessionFactory.openSession();
         transaction = session.beginTransaction();
@@ -57,5 +54,4 @@ private Transaction transaction;
         session.close();
         return addresses;
     }
-
 }

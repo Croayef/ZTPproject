@@ -51,5 +51,4 @@ public class StanowiskoDAO implements StanowiskoDAOInterface {
         session.close();
         return positions;
     }
-
 }

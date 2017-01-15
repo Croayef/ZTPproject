@@ -5,12 +5,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 
 public class TransactionWindow extends JPanel implements CustomWindowInterface {
 
@@ -58,7 +56,7 @@ public class TransactionWindow extends JPanel implements CustomWindowInterface {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.CENTER;
         this.add(outcomeLabel, constraints);
-        
+
     }
 
     public static TransactionWindow getInstance() {
@@ -79,7 +77,4 @@ public class TransactionWindow extends JPanel implements CustomWindowInterface {
     public JTable getTransactionsTable() {
         return this.transactions;
     }
-
-
-
 }

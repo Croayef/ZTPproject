@@ -2,7 +2,6 @@ package displayers;
 
 import POJO.Film;
 import POJO.Gatunek;
-import POJO.GatunekFilm;
 import POJO.GatunekFilmId;
 import POJO.Nosnik;
 import POJO.Rezyser;
@@ -21,7 +20,7 @@ public class FilmDetails extends FilmDisplayer {
         tableHeaders.add("Nośnik");
         tableHeaders.add("Ilość");
         tableHeaders.add("Dostępność");
-        return null;
+        return tableHeaders;
     }
 
     protected Vector showData(List<Film> movies, List<Rezyser> directors, List<Nosnik> carriers, List<Gatunek> genres, List<GatunekFilmId> movieGenres) {
@@ -67,5 +66,4 @@ public class FilmDetails extends FilmDisplayer {
         }
         return tableData;
     }
-
 }

@@ -52,5 +52,4 @@ public class GatunekDAO implements GatunekDAOInterface {
         session.close();
         return genres;
     }
-
 }
