@@ -113,7 +113,7 @@ public class MainWindow extends JFrame {
         transakcje.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
                 onTransakcjeClicked(evt);
-                ((TransactionWindow)windowFactory.getWindow(TRANSACTION)).getOutcomeLabel().setVisible(false);
+                ((TransactionWindow) windowFactory.getWindow(TRANSACTION)).getOutcomeLabel().setVisible(false);
             }
         });
 
@@ -123,15 +123,15 @@ public class MainWindow extends JFrame {
         admFilmDodaj.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onDodajFilmClicked(e);
-                ((AddMovieWindow)windowFactory.getWindow(ADD_MOVIE)).getOutcomeLabel().setVisible(false);
+                ((AddMovieWindow) windowFactory.getWindow(ADD_MOVIE)).getOutcomeLabel().setVisible(false);
             }
         });
         JMenuItem admFilmUsun = new JMenuItem("Usuń Film");
         admFilmUsun.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onUsunFilmClicked(e);
-                ((RemoveMovieWindow)windowFactory.getWindow(REMOVE_MOVIE)).getRemoveMovieError().setVisible(false);
-                ((RemoveMovieWindow)windowFactory.getWindow(REMOVE_MOVIE)).getRemoveMovieSuccess().setVisible(false);
+                ((RemoveMovieWindow) windowFactory.getWindow(REMOVE_MOVIE)).getRemoveMovieError().setVisible(false);
+                ((RemoveMovieWindow) windowFactory.getWindow(REMOVE_MOVIE)).getRemoveMovieSuccess().setVisible(false);
             }
         });
         admFilm.add(admFilmDodaj);
@@ -143,14 +143,14 @@ public class MainWindow extends JFrame {
         admGatunekDodaj.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 onDodajGatunekClicked(evt);
-                ((AddGenreWindow)windowFactory.getWindow(ADD_GENRE)).getOutcomeLabel().setVisible(false);
+                ((AddGenreWindow) windowFactory.getWindow(ADD_GENRE)).getOutcomeLabel().setVisible(false);
             }
         });
         JMenuItem admGatunekUsun = new JMenuItem("Usuń Gatunek");
         admGatunekUsun.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 onUsunGatunekClicked(evt);
-                ((RemoveGenreWindow)windowFactory.getWindow(REMOVE_GENRE)).getRemoveGenreLabel().setVisible(false);
+                ((RemoveGenreWindow) windowFactory.getWindow(REMOVE_GENRE)).getRemoveGenreLabel().setVisible(false);
             }
         });
         admGatunek.add(admGatunekDodaj);
@@ -161,8 +161,8 @@ public class MainWindow extends JFrame {
         bazaFilmow.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
                 onBazaFilmowClicked(evt);
-                ((ShowMovieWindow)windowFactory.getWindow(SHOW_MOVIE)).getShowMovieSucces().setVisible(false);
-                ((ShowMovieWindow)windowFactory.getWindow(SHOW_MOVIE)).getShowMovieeError().setVisible(false);
+                ((ShowMovieWindow) windowFactory.getWindow(SHOW_MOVIE)).getShowMovieSucces().setVisible(false);
+                ((ShowMovieWindow) windowFactory.getWindow(SHOW_MOVIE)).getShowMovieeError().setVisible(false);
             }
         });
 
@@ -504,7 +504,7 @@ public class MainWindow extends JFrame {
         window = windowFactory.getWindow(REMOVE_MOVIE);
         ((RemoveMovieWindow) window).getRemoveMovieSuccess().setVisible(false);
         ((RemoveMovieWindow) window).getRemoveMovieError().setVisible(false);
-        try{
+        try {
             JTable lista = ((RemoveMovieWindow) window).getTable();
             int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
             filmy.removeFilm(id, databaseUtil);
@@ -553,25 +553,27 @@ public class MainWindow extends JFrame {
     public void onOdrzucTransakcjeButtonClicked() {
 
         //Odrzuc Transakcje
-         window = windowFactory.getWindow(TRANSACTION);
+        window = windowFactory.getWindow(TRANSACTION);
         JLabel label = ((TransactionWindow) window).getOutcomeLabel();
-        JTable lista = ((TransactionWindow) window).getTable();                                                         
+        JTable lista = ((TransactionWindow) window).getTable();
         if (lista.getSelectedRow() != -1) {
             if (lista.getValueAt(lista.getSelectedRow(), 3).toString().equalsIgnoreCase("Wypożyczenie")) {
                 try {
                     transakcje.removeTransakcja(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
                     label.setText("Usunięto");
                     label.setForeground(Color.green);
-                    label.setVisible(true);
-            
-                } catch(HibernateException he) {
+                } catch (HibernateException he) {
+                    he.printStackTrace();
                     label.setText("Błąd");
                     label.setForeground(Color.red);
-                    label.setVisible(true);                    
+                } finally {
+                    label.setVisible(true);
                 }
+            }
         }
-        }
+        showTransactionWindow();
     }
+
     public void onZatwierdzTransakcjeButtonClicked() {
 
         //Zatwierdz Transakcje
