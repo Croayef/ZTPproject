@@ -540,12 +540,20 @@ public class MainWindow extends JFrame {
         window = windowFactory.getWindow(REMOVE_MOVIE);
         ((RemoveMovieWindow) window).getRemoveMovieSuccess().setVisible(false);
         ((RemoveMovieWindow) window).getRemoveMovieError().setVisible(false);
+        int abort = 0;
         try {
             JTable lista = ((RemoveMovieWindow) window).getTable();
             int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
 
+            for( Transakcja t : transakcje.getEachTransakcja(databaseUtil))
+            {
+                if(t.getIdFilmu() == id)
+                {
+                    abort = 1;
+                }
+            }
             for (GatunekFilm gf : gatunkiFilmy.getEachGatunekFilm(databaseUtil)) {
-                if (gf.getId().getIdFilmu() == id) {
+                if (gf.getId().getIdFilmu() == id && abort != 1) {
                     gatunkiFilmy.removeGatunekFilm(gf.getId(), databaseUtil);
                 }
             }
