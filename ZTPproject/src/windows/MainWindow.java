@@ -189,8 +189,9 @@ public class MainWindow extends JFrame {
     }
 
     public void showRemoveMovieWindow() {
-
-        // wypełnienie listy nosników, reżyserów i gatunków do wyboru
+         window = windowFactory.getWindow("REMOVE_MOVIE");
+         movieDisplayer.showFilmy(window.getTable(), filmy.getEachFilm(databaseUtil), rezyser.getEachRezyser(databaseUtil), nosniki.getEachNosnik(databaseUtil), gatunki.getEachGatunek(databaseUtil), null);
+         
     }
 
     private void onDodajGatunekClicked(ActionEvent e) {
@@ -208,7 +209,16 @@ public class MainWindow extends JFrame {
 
     public void showRemoveGenreWindow() {
         window = windowFactory.getWindow("REMOVE_GENRE");
-        // wypelnienie listy gatunkow do wyboru
+        JList genres = ((RemoveGenreWindow) window).getRemoveGenreTable();
+        
+        genres.removeAll();
+        DefaultListModel listModel = new DefaultListModel();
+        listModel.removeAllElements();
+        for (Gatunek g : gatunki.getEachGatunek(databaseUtil))
+        {
+            listModel.addElement(g.getIdGatunku() + ". " + g.getNazwa());
+        }
+        genres.setModel(listModel);
     }
 
     private void onBazaFilmowClicked(MouseEvent e) {
