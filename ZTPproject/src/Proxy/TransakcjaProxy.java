@@ -4,7 +4,12 @@ import DAO.TransakcjaDAO;
 import DAOInterfaces.TransakcjaDAOInterface;
 import POJO.Transakcja;
 import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import org.apache.derby.impl.tools.sysinfo.Main;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
+import windows.MainWindow;
 
 public class TransakcjaProxy implements TransakcjaDAOInterface{
     private TransakcjaDAOInterface transakcja;
@@ -15,7 +20,15 @@ public class TransakcjaProxy implements TransakcjaDAOInterface{
 
     
     public void addTransakcja(Transakcja transakcja, SessionFactory sessionFactory) {
-        this.transakcja.addTransakcja(transakcja, sessionFactory);
+        switch(MainWindow.getRole()) {
+            case 1:
+                this.transakcja.addTransakcja(transakcja, sessionFactory);
+                break;
+            default :
+                JOptionPane.showMessageDialog(MainWindow.getInstance(), "");
+                
+                throw new HibernateException("Brak uprawnien");
+        }
     }
 
    

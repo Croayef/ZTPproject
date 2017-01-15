@@ -49,9 +49,11 @@ import javax.swing.table.DefaultTableModel;
 import org.hibernate.HibernateException;
 
 public class MainWindow extends JFrame {
-
+    
+    private static MainWindow instance;
+    
     private int user = 0;
-    private int role = -1; // 0 -admin, 1- user, 2- pracownik
+    private static int role = -1; // 0 -admin, 1- user, 2- pracownik
     JPanel cards;
     final static String FIRSTCARD = "Card1";
     final static String SHOW_MOVIE = "SHOW_MOVIE";
@@ -90,6 +92,7 @@ public class MainWindow extends JFrame {
         this.pracownicy = new PracownikProxy();
         this.windowFactory = new WindowFactory();
         this.gatunkiFilmy = new GatunekFilmProxy();
+        instance = this;
         prepareMenuBar();
         prepareComponents();
     }
@@ -106,6 +109,7 @@ public class MainWindow extends JFrame {
         this.klienci = new KlientProxy();
         this.pracownicy = new PracownikProxy();
         this.windowFactory = new WindowFactory();
+        instance = this;
         prepareMenuBar();
         prepareComponents();
 
@@ -441,36 +445,35 @@ public class MainWindow extends JFrame {
         System.out.println("windows.MainWindow.onZamowButtonClicked()");
         //Zamow film
         window = windowFactory.getWindow(SHOW_MOVIE);
-         JLabel labelSucces = ((ShowMovieWindow) window).getShowMovieSucces();
-         JLabel labelError = ((ShowMovieWindow) window).getShowMovieeError();
-        JTable lista = ((ShowMovieWindow) window).getTable();     
-        
-         if (lista.getSelectedRow() != -1) {
+        JLabel labelSucces = ((ShowMovieWindow) window).getShowMovieSucces();
+        JLabel labelError = ((ShowMovieWindow) window).getShowMovieeError();
+        JTable lista = ((ShowMovieWindow) window).getTable();
+
+        if (lista.getSelectedRow() != -1) {
             if (lista.getValueAt(lista.getSelectedRow(), 4).toString().equalsIgnoreCase("Dostępny")) {
-                try{
-                Transakcja t = new Transakcja();
-                 t.setIdKlienta(user);
+                try {
+                    Transakcja t = new Transakcja();
+                    t.setIdKlienta(user);
                     t.setIdFilmu(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()));
                     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
                     Date date = new Date();
                     t.setDataTransakcji(date);
                     t.setTyp("WYP");
-                transakcje.addTransakcja(t, databaseUtil);
-                Film film = filmy.getFilm(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
-                film.setIlosc(film.getIlosc()-1);
-                filmy.editFilm(film, databaseUtil);
-                labelSucces.setVisible(true);
-                }
-                catch(HibernateException he){
+                    transakcje.addTransakcja(t, databaseUtil);
+                    Film film = filmy.getFilm(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
+                    film.setIlosc(film.getIlosc() - 1);
+                    filmy.editFilm(film, databaseUtil);
+                    labelSucces.setVisible(true);
+                } catch (HibernateException he) {
                     he.printStackTrace();
                     labelError.setVisible(true);
-                }finally{
-                    
-                    
+                } finally {
+
                 }
             }
+        }
     }
-    }
+
     public void onDodajFilmButtonClicked() {
 
         window = windowFactory.getWindow(ADD_MOVIE);
@@ -540,11 +543,9 @@ public class MainWindow extends JFrame {
         try {
             JTable lista = ((RemoveMovieWindow) window).getTable();
             int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
-            
-            for(GatunekFilm gf : gatunkiFilmy.getEachGatunekFilm(databaseUtil))
-            {
-                if(gf.getId().getIdFilmu() == id)
-                {
+
+            for (GatunekFilm gf : gatunkiFilmy.getEachGatunekFilm(databaseUtil)) {
+                if (gf.getId().getIdFilmu() == id) {
                     gatunkiFilmy.removeGatunekFilm(gf.getId(), databaseUtil);
                 }
             }
@@ -580,7 +581,7 @@ public class MainWindow extends JFrame {
 
         try {
             JTable lista = ((RemoveGenreWindow) window).getRemoveGenreTable();
-            int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());            
+            int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
             gatunki.removeGatunek(id, databaseUtil);
             out.setText("Pomyślnie usunięto gatunek!");
             out.setForeground(Color.green);
@@ -643,6 +644,16 @@ public class MainWindow extends JFrame {
 
     }
 
+    public static int getRole() {
+        return role;
+    }
+
+    public static MainWindow getInstance() {
+        return instance;
+    }
+    
+    
+    
     public static void main(String[] args) {
         MainWindow mainWindow = new MainWindow();
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
