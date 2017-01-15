@@ -479,8 +479,25 @@ public class MainWindow extends JFrame {
     public void onOdrzucTransakcjeButtonClicked() {
 
         //Odrzuc Transakcje
+         window = windowFactory.getWindow(TRANSACTION);
+        JLabel label = ((TransactionWindow) window).getOutcomeLabel();
+        JTable lista = ((TransactionWindow) window).getTable();                                                         
+        if (lista.getSelectedRow() != -1) {
+            if (lista.getValueAt(lista.getSelectedRow(), 3).toString().equalsIgnoreCase("Wypożyczenie")) {
+                try {
+                    transakcje.removeTransakcja(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
+                    label.setText("Usunięto");
+                    label.setForeground(Color.green);
+                    label.setVisible(true);
+            
+                } catch(HibernateException he) {
+                    label.setText("Błąd");
+                    label.setForeground(Color.red);
+                    label.setVisible(true);                    
+                }
+        }
+        }
     }
-
     public void onZatwierdzTransakcjeButtonClicked() {
 
         //Zatwierdz Transakcje
@@ -512,7 +529,7 @@ public class MainWindow extends JFrame {
         MainWindow mainWindow = new MainWindow();
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainWindow.setSize(800, 800);
-        mainWindow.setResizable(false);
+        mainWindow.setResizable(true);
         mainWindow.pack();
         mainWindow.setVisible(true);
     }
