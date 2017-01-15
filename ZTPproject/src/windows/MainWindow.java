@@ -428,12 +428,24 @@ public class MainWindow extends JFrame {
 
     public void onDodajGatunekButtonClicked() {
 
-        //Dodaj gatunek
+        window = windowFactory.getWindow(ADD_GENRE);
+        
+        if(((AddGenreWindow)window).getNewGenreNameTextField()!= null )
+        {
+            Gatunek g = new Gatunek();
+            g.setNazwa(((AddGenreWindow)window).getNewGenreNameTextField().getText());
+            gatunki.addGatunek(g, databaseUtil);
+        }
     }
 
     public void onUsunGatunekButtonClicked() {
 
-        //Usun gatunek
+        window = windowFactory.getWindow(REMOVE_GENRE);
+        
+        JTable lista = ((RemoveGenreWindow)window).getRemoveGenreTable();
+        int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
+        gatunki.removeGatunek(id, databaseUtil);
+        showRemoveGenreWindow();
     }
 
     public void onOdrzucTransakcjeButtonClicked() {

@@ -23,15 +23,15 @@ public class AdresProxy implements AdresDAOInterface {
     }
 
     public void editAdres(Adres adres, SessionFactory sessionFactory) {
-        this.editAdres(adres, sessionFactory);
+        this.adres.editAdres(adres, sessionFactory);
     }
 
     public Adres getAdres(int id, SessionFactory sessionFactory) {
-        return this.getAdres(id, sessionFactory);
+        return this.adres.getAdres(id, sessionFactory);
     }
 
     public List<Adres> getEachAdres(SessionFactory sessionFactory) {
-        return this.getEachAdres(sessionFactory);
+        return this.adres.getEachAdres(sessionFactory);
     }
     
 }

@@ -14,17 +14,17 @@ public class GatunekProxy implements GatunekDAOInterface {
     }
     
     public void addGatunek(Gatunek gatunek, SessionFactory sessionFactory) {
-        this.addGatunek(gatunek, sessionFactory);
+        this.gatunek.addGatunek(gatunek, sessionFactory);
     }
 
   
     public void removeGatunek(int id, SessionFactory sessionFactory) {
-        this.removeGatunek(id, sessionFactory);
+        this.gatunek.removeGatunek(id, sessionFactory);
     }
 
    
     public void editGatunek(Gatunek gatunek, SessionFactory sessionFactory) {
-        this.editGatunek(gatunek, sessionFactory);
+        this.gatunek.editGatunek(gatunek, sessionFactory);
     }
 
     

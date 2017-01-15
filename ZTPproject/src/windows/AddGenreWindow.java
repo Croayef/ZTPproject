@@ -56,9 +56,13 @@ public class AddGenreWindow extends JPanel implements CustomWindowInterface {
     public JButton getAddGenreButton() {
         return this.addGenreButton;
     }
-    
+
+    public JTextField getNewGenreNameTextField() {
+        return this.newGenreName;
+    }
+
     public void clear() {
         this.nameLabel.setText("");
     }
-    
+
 }

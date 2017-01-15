@@ -25,7 +25,7 @@ public class KlientProxy implements KlientDAOInterface{
 
   
     public void editKlient(Klient klient, SessionFactory sessionFactory) {
-        this.editKlient(klient, sessionFactory);
+        this.klient.editKlient(klient, sessionFactory);
     }
 
   

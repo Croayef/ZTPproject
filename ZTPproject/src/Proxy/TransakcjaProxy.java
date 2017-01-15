@@ -20,12 +20,12 @@ public class TransakcjaProxy implements TransakcjaDAOInterface{
 
    
     public void removeTransakcja(int id, SessionFactory sessionFactory) {
-        this.removeTransakcja(id, sessionFactory);
+        this.transakcja.removeTransakcja(id, sessionFactory);
     }
 
   
     public void editTransakcja(Transakcja transakcja, SessionFactory sessionFactory) {
-        this.editTransakcja(transakcja, sessionFactory);
+        this.transakcja.editTransakcja(transakcja, sessionFactory);
     }
 
   
