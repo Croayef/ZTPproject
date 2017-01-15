@@ -133,6 +133,14 @@ public class AddMovieWindow extends JPanel implements CustomWindowInterface {
     public JList<String> getGenreList() {
         return this.genreList;
     }
+    
+    public JComboBox<String> getCarriers() {
+        return this.newMovieCarrier;
+    }
+    
+    public JComboBox<String> getDirectors() {
+        return this.newMovieDirector;
+    }
 
     public JButton getAddMovieButton() {
         return this.addMovieButton;
