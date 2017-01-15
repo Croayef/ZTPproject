@@ -61,6 +61,10 @@ public class AddGenreWindow extends JPanel implements CustomWindowInterface {
         return this.newGenreName;
     }
 
+    public JLabel getOutcomeLabel() {
+        return outcomeLabel;
+    }
+    
     public void clear() {
         this.nameLabel.setText("");
     }

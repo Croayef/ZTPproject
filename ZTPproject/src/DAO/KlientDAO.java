@@ -13,7 +13,7 @@ public class KlientDAO implements KlientDAOInterface {
     private Transaction transaction;
 
     public void addKlient(Klient klient, SessionFactory sessionFactory) {
-        session = sessionFactory.getCurrentSession();
+        session = sessionFactory.openSession();
         transaction = session.beginTransaction();
         session.save(klient);
         transaction.commit();
@@ -21,7 +21,7 @@ public class KlientDAO implements KlientDAOInterface {
     }
 
     public void removeKlient(int id, SessionFactory sessionFactory) {
-        session = sessionFactory.getCurrentSession();
+        session = sessionFactory.openSession();
         transaction = session.beginTransaction();
         Klient klient = (Klient) session.get(Klient.class, id);
         session.delete(klient);
@@ -30,7 +30,7 @@ public class KlientDAO implements KlientDAOInterface {
     }
 
     public void editKlient(Klient klient, SessionFactory sessionFactory) {
-        session = sessionFactory.getCurrentSession();
+        session = sessionFactory.openSession();
         transaction = session.beginTransaction();
         session.update(klient);
         transaction.commit();
@@ -38,7 +38,7 @@ public class KlientDAO implements KlientDAOInterface {
     }
 
     public Klient getKlient(int id, SessionFactory sessionFactory) {
-        session = sessionFactory.getCurrentSession();
+        session = sessionFactory.openSession();
         transaction = session.beginTransaction();
         Klient klient = (Klient) session.get(Klient.class, id);
         transaction.commit();

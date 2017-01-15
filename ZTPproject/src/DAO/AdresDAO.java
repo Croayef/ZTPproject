@@ -13,7 +13,7 @@ public class AdresDAO implements AdresDAOInterface {
     private Transaction transaction;
 
     public void addAdres(Adres adres, SessionFactory sessionFactory) {
-        session = sessionFactory.getCurrentSession();
+        session = sessionFactory.openSession();
         transaction = session.beginTransaction();
         session.save(adres);
         transaction.commit();
@@ -21,7 +21,7 @@ public class AdresDAO implements AdresDAOInterface {
     }
 
     public void removeAdres(int id, SessionFactory sessionFactory) {
-        session = sessionFactory.getCurrentSession();
+        session = sessionFactory.openSession();
         transaction = session.beginTransaction();
         Adres adres = (Adres) session.get(Adres.class, id);
         session.delete(adres);
@@ -30,7 +30,7 @@ public class AdresDAO implements AdresDAOInterface {
     }
 
     public void editAdres(Adres adres, SessionFactory sessionFactory) {
-        session = sessionFactory.getCurrentSession();
+        session = sessionFactory.openSession();
         transaction = session.beginTransaction();
         session.update(adres);
         transaction.commit();
@@ -38,7 +38,7 @@ public class AdresDAO implements AdresDAOInterface {
     }
 
     public Adres getAdres(int id, SessionFactory sessionFactory) {
-        session = sessionFactory.getCurrentSession();
+        session = sessionFactory.openSession();
         transaction = session.beginTransaction();
         Adres adres = (Adres) session.get(Adres.class, id);
         transaction.commit();
