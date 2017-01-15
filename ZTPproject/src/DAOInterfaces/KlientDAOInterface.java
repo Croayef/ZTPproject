@@ -14,5 +14,5 @@ public interface KlientDAOInterface {
 
     public Klient getKlient(int id, SessionFactory sessionFactory);
 
-    public List<Klient> getEachKlient(Klient klient, SessionFactory sessionFactory);
+    public List<Klient> getEachKlient(SessionFactory sessionFactory);
 }

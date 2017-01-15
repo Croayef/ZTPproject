@@ -1,14 +1,18 @@
 package DAOInterfaces;
 
-public interface GatunekFilmDAOInterface {
+import POJO.GatunekFilm;
+import java.util.List;
+import org.hibernate.SessionFactory;
 
-    public void addGatunekFilm();
+public interface GatunekFilmDAOInterface  {
 
-    public void removeGatunekFilm();
+    public void addGatunekFilm(GatunekFilm gatunekFilm, SessionFactory sessionFactory);
 
-    public void editGatunekFilm();
+    public void removeGatunekFilm(int id, SessionFactory sessionFactory);
 
-    public void getGatunekFilm();
+    public void editGatunekFilm(GatunekFilm gatunekFilm, SessionFactory sessionFactory);
 
-    public void getEachGatunekFilm();
+    public GatunekFilm getGatunekFilm(int id, SessionFactory sessionFactory);
+
+    public List<GatunekFilm> getEachGatunekFilm(SessionFactory sessionFactory);
 }

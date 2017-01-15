@@ -46,7 +46,7 @@ public class KlientDAO implements KlientDAOInterface {
         return klient;
     }
 
-    public List<Klient> getEachKlient(Klient klient, SessionFactory sessionFactory) {
+    public List<Klient> getEachKlient(SessionFactory sessionFactory) {
         session = sessionFactory.openSession();
         transaction = session.beginTransaction();
         List<Klient> klientlist = (List<Klient>) session.createCriteria(Klient.class).list();

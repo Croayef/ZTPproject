@@ -51,6 +51,12 @@ public class ReturnsMovieWindow extends JPanel implements CustomWindowInterface 
         return instance;
     }
 
+    public JTable getTable()
+    {
+        return returnsmoviesTable;
+    }
+    
+    
     public JButton getReturnsmovieButton() {
         return returnsMovieButton;
     }
