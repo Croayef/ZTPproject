@@ -13,7 +13,7 @@ public class TransakcjaDAO implements TransakcjaDAOInterface {
     private Transaction transaction;
 
     public void addTransakcja(Transakcja transakcja, SessionFactory sessionFactory) {
-        session = sessionFactory.getCurrentSession();
+        session = sessionFactory.openSession();
         transaction = session.beginTransaction();
         session.save(transakcja);
         transaction.commit();
@@ -21,7 +21,7 @@ public class TransakcjaDAO implements TransakcjaDAOInterface {
     }
 
     public void removeTransakcja(int id, SessionFactory sessionFactory) {
-        session = sessionFactory.getCurrentSession();
+        session = sessionFactory.openSession();
         transaction = session.beginTransaction();
         Transakcja transakcja = (Transakcja) session.get(Transakcja.class, id);
         session.delete(transakcja);
