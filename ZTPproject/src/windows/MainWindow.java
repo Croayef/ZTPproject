@@ -43,6 +43,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListModel;
 import javax.swing.table.DefaultTableModel;
@@ -430,12 +431,13 @@ public class MainWindow extends JFrame {
             }
             if (this.role < 0) {
                 ((LoginWindow) window).getErrorField().setVisible(true);
+                JOptionPane.showMessageDialog(this, "Bląd uwierzytelniania!");
             } else {
                 ((CardLayout) cards.getLayout()).show(cards, WELCOME);
                 menuBar.setVisible(true);
             }
         } else {
-            ((LoginWindow) window).getErrorField().setVisible(true);
+                JOptionPane.showMessageDialog(this, "Bląd uwierzytelniania!");
         }
 
         ((JPanel) window).revalidate();
@@ -463,10 +465,10 @@ public class MainWindow extends JFrame {
                     Film film = filmy.getFilm(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
                     film.setIlosc(film.getIlosc() - 1);
                     filmy.editFilm(film, databaseUtil);
-                    labelSucces.setVisible(true);
+                JOptionPane.showMessageDialog(this, "Zamówiono");
                 } catch (HibernateException he) {
                     he.printStackTrace();
-                    labelError.setVisible(true);
+                JOptionPane.showMessageDialog(this, "Problem z zamówieniem!");
                 } finally {
 
                 }
@@ -484,9 +486,7 @@ public class MainWindow extends JFrame {
             newMovieYear = Short.parseShort(((AddMovieWindow) window).getNewMovieYear().getText());
             newMovieQuant = Long.parseLong(((AddMovieWindow) window).getNewMovieQuantity().getText());
         } catch (Exception e) {
-            ((AddMovieWindow) window).getOutcomeLabel().setText("Wprowadź poprawne dane!");
-            ((AddMovieWindow) window).getOutcomeLabel().setForeground(Color.red);
-            ((AddMovieWindow) window).getOutcomeLabel().setVisible(true);
+                JOptionPane.showMessageDialog(this, "Wprowadź poprawne dane!");
             return;
         }
         JList newMovieGenre = ((AddMovieWindow) window).getGenreList();
@@ -497,9 +497,7 @@ public class MainWindow extends JFrame {
                 || ((AddMovieWindow) window).getCarriers().getSelectedIndex() < 0
                 || ((AddMovieWindow) window).getDirectors().getSelectedIndex() < 0
                 || newMovieGenre.getSelectedIndices().length <= 0) {
-            ((AddMovieWindow) window).getOutcomeLabel().setText("Wprowadź poprawne dane!");
-            ((AddMovieWindow) window).getOutcomeLabel().setForeground(Color.red);
-            ((AddMovieWindow) window).getOutcomeLabel().setVisible(true);
+                JOptionPane.showMessageDialog(this, "Wprowadź poprawne dane!");
         } else {
 
             Film newFilm = new Film();
@@ -518,14 +516,12 @@ public class MainWindow extends JFrame {
                     gatunkiFilmy.addGatunekFilm(new GatunekFilm(new GatunekFilmId(Integer.parseInt(model.getElementAt(indexes[i]).toString().substring(0, model.getElementAt(indexes[i]).toString().indexOf("."))), newFilm.getIdFilmu())), databaseUtil);
                 }
 
-                ((AddMovieWindow) window).getOutcomeLabel().setText("Dodano film do bazy");
-                ((AddMovieWindow) window).getOutcomeLabel().setForeground(Color.green);
+                JOptionPane.showMessageDialog(this, "Dodano film do bazy");
                 window.clear();
             } catch (HibernateException he) {
                 he.printStackTrace();
 
-                ((AddMovieWindow) window).getOutcomeLabel().setText("Nie można dodać filmu!");
-                ((AddMovieWindow) window).getOutcomeLabel().setForeground(Color.red);
+                JOptionPane.showMessageDialog(this, "Nie można dodać filmu!");
 
             } finally {
                 newFilm = null;
@@ -550,10 +546,10 @@ public class MainWindow extends JFrame {
                 }
             }
             filmy.removeFilm(id, databaseUtil);
-            ((RemoveMovieWindow) window).getRemoveMovieSuccess().setVisible(true);
+                JOptionPane.showMessageDialog(this, "Pomyślnie usunięto film");
         } catch (HibernateException e) {
             e.printStackTrace();
-            ((RemoveMovieWindow) window).getRemoveMovieError().setVisible(true);
+                JOptionPane.showMessageDialog(this, "Nie można usunąć filmu!");
         }
         showRemoveMovieWindow();
     }
@@ -579,11 +575,11 @@ public class MainWindow extends JFrame {
                 Film film = filmy.getFilm(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
                 film.setIlosc(film.getIlosc()+1);
                 filmy.editFilm(film, databaseUtil);
-                labelSucces.setVisible(true);
+                JOptionPane.showMessageDialog(this, "Zwrócono film");
                 }
                 catch(HibernateException he){
                     he.printStackTrace();
-                    labelError.setVisible(true);
+                JOptionPane.showMessageDialog(this, "Błąd zwrotu");
                 }finally{
                     
                     
@@ -612,11 +608,9 @@ public class MainWindow extends JFrame {
             JTable lista = ((RemoveGenreWindow) window).getRemoveGenreTable();
             int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
             gatunki.removeGatunek(id, databaseUtil);
-            out.setText("Pomyślnie usunięto gatunek!");
-            out.setForeground(Color.green);
+            JOptionPane.showMessageDialog(this, "Pomyślnie usunięto gatunek!");
         } catch (HibernateException e) {
-            out.setText("Nie można usunąć gatunku!");
-            out.setForeground(Color.red);
+            JOptionPane.showMessageDialog(this, "Nie można usunąć gatunku");
         }
         ((RemoveGenreWindow) window).getRemoveGenreLabel().setVisible(true);
         showRemoveGenreWindow();
@@ -632,12 +626,10 @@ public class MainWindow extends JFrame {
             if (lista.getValueAt(lista.getSelectedRow(), 3).toString().equalsIgnoreCase("Wypożyczenie")) {
                 try {
                     transakcje.removeTransakcja(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
-                    label.setText("Usunięto");
-                    label.setForeground(Color.green);
+            JOptionPane.showMessageDialog(this, "Usunięto");
                 } catch (HibernateException he) {
                     he.printStackTrace();
-                    label.setText("Błąd");
-                    label.setForeground(Color.red);
+            JOptionPane.showMessageDialog(this, "Błąd, nie usunięto!");
                 } finally {
                     label.setVisible(true);
                 }
@@ -658,14 +650,10 @@ public class MainWindow extends JFrame {
                     Transakcja transakcja = transakcje.getTransakcja(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
                     transakcja.setIdPracownika(user);
                     transakcje.editTransakcja(transakcja, databaseUtil);
-                    label.setText("Zatwierdzono");
-                    label.setForeground(Color.green);
-                    label.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Zatwierdzono");
                 } catch (HibernateException he) {
                     he.printStackTrace();
-                    label.setText("Błąd");
-                    label.setForeground(Color.red);
-                    label.setVisible(true);
+            JOptionPane.showMessageDialog(this, "Błąd!");
                 }
             }
             showTransactionWindow();
