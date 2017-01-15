@@ -26,8 +26,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Calendar;
+import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -436,8 +439,37 @@ public class MainWindow extends JFrame {
     public void onZamowButtonClicked() {
 
         //Zamow film
+        window = windowFactory.getWindow(SHOW_MOVIE);
+         JLabel labelSucces = ((ShowMovieWindow) window).getShowMovieSucces();
+         JLabel labelError = ((ShowMovieWindow) window).getShowMovieeError();
+        JTable lista = ((ShowMovieWindow) window).getTable();     
+        
+         if (lista.getSelectedRow() != -1) {
+            if (lista.getValueAt(lista.getSelectedRow(), 4).toString().equalsIgnoreCase("Dostępny")) {
+                try{
+                Transakcja t = new Transakcja();
+                 t.setIdKlienta(user);
+                    t.setIdFilmu(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()));
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                    Date date = new Date();
+                    t.setDataTransakcji(date);
+                    t.setTyp("WYP");
+                transakcje.addTransakcja(t, databaseUtil);
+                Film film = filmy.getFilm(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
+                film.setIlosc(film.getIlosc()-1);
+                filmy.editFilm(film, databaseUtil);
+                labelSucces.setVisible(true);
+                }
+                catch(HibernateException he){
+                    he.printStackTrace();
+                    labelError.setVisible(true);
+                }finally{
+                    
+                    
+                }
+            }
     }
-
+    }
     public void onDodajFilmButtonClicked() {
 
         window = windowFactory.getWindow(ADD_MOVIE);
