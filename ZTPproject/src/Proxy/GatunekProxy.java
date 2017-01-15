@@ -34,7 +34,7 @@ public class GatunekProxy implements GatunekDAOInterface {
 
     
     public List<Gatunek> getEachGatunek(SessionFactory sessionFactory) {
-        return this.getEachGatunek(sessionFactory);
+        return this.gatunek.getEachGatunek(sessionFactory);
     }
     
 }

@@ -1,5 +1,8 @@
 package windows;
 
+import POJO.Nosnik;
+import POJO.Gatunek;
+import POJO.Rezyser;
 import Proxy.FilmProxy;
 import Proxy.GatunekProxy;
 import Proxy.NosnikProxy;
@@ -12,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -22,6 +26,11 @@ import javax.swing.JTextField;
 import org.hibernate.SessionFactory;
 import util.HibernateUtil;
 import util.WindowFactory;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.JComboBox;
+import javax.swing.JList;
 
 public class MainWindow extends JFrame {
 
@@ -29,6 +38,10 @@ public class MainWindow extends JFrame {
     JPanel cards;
     final static String FIRSTCARD = "Card1";
     final static String SECONDCARD = "Card2";
+    final static String SHOW_MOVIE = "SHOW_MOVIE";
+    final static String ADD_MOVIE = "ADD_MOVIE";
+    final static String REMOVE_MOVIE = "REMOVE_MOVIE";
+    
     private FilmProxy filmy;
     private RezyserProxy rezyser;
     private FilmDisplayer movieDisplayer;
@@ -68,15 +81,15 @@ public class MainWindow extends JFrame {
         JMenu administracja = new JMenu("Administracja");
         JMenu admFilm = new JMenu("Film");
         JMenuItem admFilmDodaj = new JMenuItem("Dodaj Film");
-        admFilmDodaj.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent evt) {
-                onDodajFilmClicked(evt);
+        admFilmDodaj.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onDodajFilmClicked(e);
             }
         });
         JMenuItem admFilmUsun = new JMenuItem("Usuń Film");
-        admFilmUsun.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent evt) {
-                onUsunFilmClicked(evt);
+        admFilmUsun.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onUsunFilmClicked(e);
             }
         });
         admFilm.add(admFilmDodaj);
@@ -125,11 +138,41 @@ public class MainWindow extends JFrame {
         // zmiana widoku na TransactionWindow
     }
 
-    private void onDodajFilmClicked(MouseEvent e) {
+    private void onDodajFilmClicked(ActionEvent e) {
         // zmiana widoku na AddMovieWindow
+        ((CardLayout) cards.getLayout()).show(cards, ADD_MOVIE);
+        showAddMovieWindow();
+        
     }
+    
+    public void showAddMovieWindow() {
+        window = windowFactory.getWindow("ADD_MOVIE");
+        // wypełnienie listy nosników, reżyserów i gatunków do wyboru
+        JComboBox carriers = ((AddMovieWindow) window).getCarriers();
+        JComboBox directors = ((AddMovieWindow) window).getDirectors();
+        JList genres = ((AddMovieWindow) window).getGenreList();
+        
+        carriers.removeAllItems();
+        for (Nosnik n : nosniki.getEachNosnik(databaseUtil)) {
+            carriers.addItem(n.getTyp());
+        }
+        
+        directors.removeAllItems();
+        for (Rezyser r : rezyser.getEachRezyser(databaseUtil)) {
+            directors.addItem(r.getImie() + " " + r.getNazwisko());
+        }
+        
+        genres.removeAll();
+        DefaultListModel listModel = new DefaultListModel();
+        listModel.removeAllElements();
+        for (Gatunek g : gatunki.getEachGatunek(databaseUtil)) {
+            listModel.addElement(g.getIdGatunku() + ". " + g.getNazwa());
+        }
+        genres.setModel(listModel);
 
-    private void onUsunFilmClicked(MouseEvent e) {
+    }
+    
+    private void onUsunFilmClicked(ActionEvent e) {
         // zmiana widoku na RemoveMovieWindow
     }
 
@@ -147,7 +190,7 @@ public class MainWindow extends JFrame {
         //to tylko w ramach testu:
         view = 1;
         showMovieWindow();
-        ((CardLayout) cards.getLayout()).show(cards, SECONDCARD);
+        ((CardLayout) cards.getLayout()).show(cards, SHOW_MOVIE);
     }
 
     private void onWylogujClicked(MouseEvent e) {
@@ -178,26 +221,55 @@ public class MainWindow extends JFrame {
         card1.add(new JButton("Button 2"));
         card1.add(new JButton("Button 3"));
 
-        JPanel card2 = new JPanel();
-        card2.add(new JTextField("TextField", 20));
+        CustomWindowInterface card;
         cards = new JPanel(new CardLayout());
         cards.add(card1, FIRSTCARD);
-        cards.add((JPanel)windowFactory.getWindow("SHOW_MOVIE"), SECONDCARD);
+        card =  windowFactory.getWindow("SHOW_MOVIE");
+        ((ShowMovieWindow)card).getShowMovieButton().addActionListener((ActionEvent e) -> {
+            onZamowButtonClicked();
+        });
+        cards.add((JPanel)card, SHOW_MOVIE);
+        card = windowFactory.getWindow("ADD_MOVIE");
+        ((AddMovieWindow)card).getAddMovieButton().addActionListener((ActionEvent e) -> {
+            onDodajFilmButtonClicked();
+        });
+        cards.add((JPanel)card, ADD_MOVIE);
+        card = windowFactory.getWindow("REMOVE_MOVIE");
+        ((RemoveMovieWindow)card).getRemoveMovieButton().addActionListener((ActionEvent e) -> {
+            onUsunFilmButtonClicked();
+        });
+        cards.add((JPanel)card, REMOVE_MOVIE);
 
         this.add(mainPane, BorderLayout.PAGE_START);
         this.add(cards, BorderLayout.CENTER);
     }
-
+    
+    public void onZamowButtonClicked() {
+        
+        //Zamow film
+        
+    }
+    
+    public void onDodajFilmButtonClicked() {
+        
+        //Dodaj film
+        
+    }
+    
+    public void onUsunFilmButtonClicked() {
+        
+        //Dodaj film
+        
+    }
+    
+    
     public void showMovieWindow() {
         window = windowFactory.getWindow("SHOW_MOVIE");
         // wypelnienie tabeli filmow
         // movieDisplayer.showFilmy(window.getTable(), filmy.getEachFilm(databaseUtil), rezyser.getEachRezyser(databaseUtil), nosniki.getEachNosnik(databaseUtil), gatunki.getEachGatunek(databaseUtil), null);
     }
 
-    public void showAddMovieWindow() {
-        window = windowFactory.getWindow("ADD_MOVIE");
-        // wypełnienie listy nosników, reżyserów i gatunków do wyboru
-    }
+    
 
     public void showRemoveMovieWindow() {
         window = windowFactory.getWindow("REMOVE_MOVIE");
@@ -218,6 +290,7 @@ public class MainWindow extends JFrame {
         // wypelnienie listy transakcji
     }
 
+    
     public static void main(String[] args) {
         MainWindow mainWindow = new MainWindow(
                 new FilmProxy(), new RezyserProxy(),

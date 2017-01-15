@@ -11,6 +11,7 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SpringLayout;
 
 public class AddMovieWindow extends JPanel implements CustomWindowInterface {
 
@@ -47,6 +48,7 @@ public class AddMovieWindow extends JPanel implements CustomWindowInterface {
         newMovieCarrier = new JComboBox<String>();
         newMovieDirector = new JComboBox<>();
         genreList = new JList<>();
+        genreList.setBounds(0, 0, 300, 300);
         genreListScrollPane = new JScrollPane(genreList);
         addMovieButton = new JButton("Dodaj Film");
         outcomeLabel = new JLabel("Outcome!");
@@ -107,12 +109,13 @@ public class AddMovieWindow extends JPanel implements CustomWindowInterface {
         this.add(genresLabel);
         constraints.gridy = 1;
         constraints.gridheight = 3;
-        constraints.anchor = GridBagConstraints.NORTHEAST;
+        constraints.anchor = GridBagConstraints.NORTHWEST;
+        constraints.fill = GridBagConstraints.BOTH;
         this.add(genreListScrollPane, constraints);
         constraints.gridy = 4;
         constraints.gridwidth = 1;
         constraints.gridheight = 1;
-        constraints.anchor = GridBagConstraints.EAST;
+        constraints.anchor = GridBagConstraints.WEST;
         constraints.fill = GridBagConstraints.NONE;
         this.add(addMovieButton, constraints);
         constraints.gridx = 0;

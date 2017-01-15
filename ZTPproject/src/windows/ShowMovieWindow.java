@@ -19,7 +19,7 @@ public class ShowMovieWindow extends JPanel implements CustomWindowInterface {
     public ShowMovieWindow() {
 
         scrollPane = new JScrollPane();
-        showMovieButton = new JButton("Usuń film");
+        showMovieButton = new JButton("Zamów film");
         moviesTable = new javax.swing.JTable();
         moviesTable.setAutoCreateRowSorter(true);
         this.setLayout(new GridBagLayout());
@@ -49,6 +49,10 @@ public class ShowMovieWindow extends JPanel implements CustomWindowInterface {
         return this.moviesTable;
     }
 
+    public JButton getShowMovieButton() {
+        return showMovieButton;
+    }
+    
     public static ShowMovieWindow getInstance() {
         if (instance == null) {
             instance = new ShowMovieWindow();

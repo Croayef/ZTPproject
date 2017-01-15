@@ -57,7 +57,7 @@ public class ReturnsMovieWindow extends JPanel implements CustomWindowInterface 
     }
     
     
-    public JButton getReturnsmovieButton() {
+    public JButton getReturnsMovieButton() {
         return returnsMovieButton;
     }
 }

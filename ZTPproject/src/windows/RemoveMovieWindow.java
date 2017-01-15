@@ -72,19 +72,19 @@ public class RemoveMovieWindow extends JPanel implements CustomWindowInterface {
         return instance;
     }
 
-    public JLabel getRemovemovieError() {
+    public JLabel getRemoveMovieError() {
         return removemovieError;
     }
 
-    public JLabel getRemovemovieSucces() {
+    public JLabel getRemoveMovieSucces() {
         return removemovieSucces;
     }
 
-    public JButton getRemovemovieButton() {
+    public JButton getRemoveMovieButton() {
         return removemovieButton;
     }
 
-    public JTable getRemovemovieTable() {
+    public JTable getRemoveMovieTable() {
         return removemovieTable;
     }
 }
