@@ -548,7 +548,7 @@ public class MainWindow extends JFrame {
             {
                 if(gf.getId().equals(id))
                 {
-                    gatunkiFilmy.removeGatunekFilm(gf.getId(), databaseUtil);
+          // pozdro          gatunkiFilmy.removeGatunekFilm(gf.getId(), databaseUtil);
                 }
             }
             filmy.removeFilm(id, databaseUtil);
