@@ -5,7 +5,10 @@ import DAOInterfaces.GatunekFilmDAOInterface;
 import POJO.GatunekFilm;
 import POJO.GatunekFilmId;
 import java.util.List;
+import javax.swing.JOptionPane;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
+import windows.MainWindow;
 
 public class GatunekFilmProxy implements GatunekFilmDAOInterface {
 
@@ -20,7 +23,14 @@ public class GatunekFilmProxy implements GatunekFilmDAOInterface {
     }
 
     public void removeGatunekFilm(GatunekFilmId id, SessionFactory sessionFactory) {
-        this.gatunekFilm.removeGatunekFilm(id, sessionFactory);
+        switch (MainWindow.getRole()) {
+            case 0:
+                this.gatunekFilm.removeGatunekFilm(id, sessionFactory);
+                break;
+            default:
+                JOptionPane.showMessageDialog(MainWindow.getInstance(), "Wymagane uprawnienia administratora!", "Brak uprawnień!", JOptionPane.ERROR_MESSAGE);
+                throw new HibernateException("Brak uprawnien");
+        }     
     }
 
     public void editGatunekFilm(GatunekFilm gatunekFilm, SessionFactory sessionFactory) {

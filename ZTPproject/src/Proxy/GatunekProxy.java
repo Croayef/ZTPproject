@@ -23,7 +23,7 @@ public class GatunekProxy implements GatunekDAOInterface {
                 this.gatunek.addGatunek(gatunek, sessionFactory);
                 break;
             default:
-                JOptionPane.showMessageDialog(MainWindow.getInstance(), "Wymagane uprawnienia administratora!", "Brak uprawnień!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MainWindow.getInstance(), "Wymagane uprawnienia administratora!", "Brak uprawnień!2", JOptionPane.ERROR_MESSAGE);
                 throw new HibernateException("Brak uprawnien");
         }
     }
@@ -34,7 +34,7 @@ public class GatunekProxy implements GatunekDAOInterface {
                 this.gatunek.removeGatunek(id, sessionFactory);
                 break;
             default:
-                JOptionPane.showMessageDialog(MainWindow.getInstance(), "Wymagane uprawnienia administratora!", "Brak uprawnień!", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MainWindow.getInstance(), "Wymagane uprawnienia administratora!", "Brak uprawnień!2", JOptionPane.ERROR_MESSAGE);
                 throw new HibernateException("Brak uprawnien");
         }   
     }

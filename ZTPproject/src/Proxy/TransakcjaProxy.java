@@ -21,9 +21,10 @@ public class TransakcjaProxy implements TransakcjaDAOInterface{
             case 1:
                 this.transakcja.addTransakcja(transakcja, sessionFactory);
                 break;
-            default :
-                JOptionPane.showMessageDialog(MainWindow.getInstance(), "Wymagane konto klienta!", "Zmień konto", JOptionPane.ERROR_MESSAGE);
-                throw new HibernateException("Brak uprawnien");
+            default : {
+                 JOptionPane.showMessageDialog(MainWindow.getInstance(), "Wymagane konto klienta!", "Zmień konto!", JOptionPane.ERROR_MESSAGE);
+                 throw new HibernateException("Brak uprawnien");
+            }  
         }
     }
 
@@ -41,10 +42,10 @@ public class TransakcjaProxy implements TransakcjaDAOInterface{
 
     public List<Transakcja> getEachTransakcja(SessionFactory sessionFactory) {
         switch(MainWindow.getRole()) {
-            case 1:
+            case 2:
                 return this.transakcja.getEachTransakcja(sessionFactory);
             default :
-                JOptionPane.showMessageDialog(MainWindow.getInstance(), "Brak uprawnień do przeglądania danych!", "Brak uprawnień", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(MainWindow.getInstance(), "Brak uprawnień do przeglądania danych!", "Brak uprawnień!", JOptionPane.ERROR_MESSAGE);
                 throw new HibernateException("Brak uprawnien");
         }
     }

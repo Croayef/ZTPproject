@@ -21,7 +21,7 @@ import displayers.FilmBasic;
 import displayers.FilmDisplayer;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -50,9 +50,9 @@ import javax.swing.table.DefaultTableModel;
 import org.hibernate.HibernateException;
 
 public class MainWindow extends JFrame {
-    
+
     private static MainWindow instance;
-    
+
     private int user = 0;
     private static int role = -1; // 0 -admin, 1- user, 2- pracownik
     JPanel cards;
@@ -210,21 +210,26 @@ public class MainWindow extends JFrame {
         tableHeaders.add("Data Transakcji");
         tableHeaders.add("Typ Transakcji");
 
-        for (Transakcja t : transakcje.getEachTransakcja(databaseUtil)) {
-            if (t.getIdPracownika() == null) {
-                Vector<Object> oneRow = new Vector<>();
-                oneRow.add(t.getIdTransakcji());
-                oneRow.add(t.getIdKlienta());
-                oneRow.add(filmy.getFilm(t.getIdFilmu(), databaseUtil).getTytul());
-                oneRow.add(t.getDataTransakcji());
-                if (t.getTyp().equals("WYP")) {
-                    oneRow.add("Wypożyczenie");
-                } else {
-                    oneRow.add("Zwrot");
-                }
+        try {
+            List<Transakcja> trans = transakcje.getEachTransakcja(databaseUtil);
+            for (Transakcja t : trans) {
+                if (t.getIdPracownika() == null) {
+                    Vector<Object> oneRow = new Vector<>();
+                    oneRow.add(t.getIdTransakcji());
+                    oneRow.add(t.getIdKlienta());
+                    oneRow.add(filmy.getFilm(t.getIdFilmu(), databaseUtil).getTytul());
+                    oneRow.add(t.getDataTransakcji());
+                    if (t.getTyp().equals("WYP")) {
+                        oneRow.add("Wypożyczenie");
+                    } else {
+                        oneRow.add("Zwrot");
+                    }
 
-                tableData.add(oneRow);
+                    tableData.add(oneRow);
+                }
             }
+        } catch (HibernateException e) {
+            e.printStackTrace();
         }
         transactions.setModel(new DefaultTableModel(tableData, tableHeaders) {
             public boolean isCellEditable(int rowIndex, int mColIndex) {
@@ -437,7 +442,7 @@ public class MainWindow extends JFrame {
                 menuBar.setVisible(true);
             }
         } else {
-                JOptionPane.showMessageDialog(this, "Bląd uwierzytelniania!");
+            JOptionPane.showMessageDialog(this, "Bląd uwierzytelniania!");
         }
 
         ((JPanel) window).revalidate();
@@ -465,10 +470,10 @@ public class MainWindow extends JFrame {
                     Film film = filmy.getFilm(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
                     film.setIlosc(film.getIlosc() - 1);
                     filmy.editFilm(film, databaseUtil);
-                JOptionPane.showMessageDialog(this, "Zamówiono");
+                    JOptionPane.showMessageDialog(this, "Zamówiono");
                 } catch (HibernateException he) {
                     he.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Problem z zamówieniem!");
+                    JOptionPane.showMessageDialog(this, "Problem z zamówieniem!");
                 } finally {
 
                 }
@@ -486,7 +491,7 @@ public class MainWindow extends JFrame {
             newMovieYear = Short.parseShort(((AddMovieWindow) window).getNewMovieYear().getText());
             newMovieQuant = Long.parseLong(((AddMovieWindow) window).getNewMovieQuantity().getText());
         } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Wprowadź poprawne dane!");
+            JOptionPane.showMessageDialog(this, "Wprowadź poprawne dane!");
             return;
         }
         JList newMovieGenre = ((AddMovieWindow) window).getGenreList();
@@ -497,7 +502,7 @@ public class MainWindow extends JFrame {
                 || ((AddMovieWindow) window).getCarriers().getSelectedIndex() < 0
                 || ((AddMovieWindow) window).getDirectors().getSelectedIndex() < 0
                 || newMovieGenre.getSelectedIndices().length <= 0) {
-                JOptionPane.showMessageDialog(this, "Wprowadź poprawne dane!");
+            JOptionPane.showMessageDialog(this, "Wprowadź poprawne dane!");
         } else {
 
             Film newFilm = new Film();
@@ -537,27 +542,32 @@ public class MainWindow extends JFrame {
         ((RemoveMovieWindow) window).getRemoveMovieSuccess().setVisible(false);
         ((RemoveMovieWindow) window).getRemoveMovieError().setVisible(false);
         int abort = 0;
+        
         try {
             JTable lista = ((RemoveMovieWindow) window).getTable();
             int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
-
-            for( Transakcja t : transakcje.getEachTransakcja(databaseUtil))
-            {
-                if(t.getIdFilmu() == id)
-                {
+            int tmp = role;
+            role = 2;
+            for (Transakcja t : transakcje.getEachTransakcja(databaseUtil)) {
+                if (t.getIdFilmu() == id) {
                     abort = 1;
+                    role = tmp;
+                    break;
                 }
             }
+            role = tmp;
+
             for (GatunekFilm gf : gatunkiFilmy.getEachGatunekFilm(databaseUtil)) {
                 if (gf.getId().getIdFilmu() == id && abort != 1) {
                     gatunkiFilmy.removeGatunekFilm(gf.getId(), databaseUtil);
                 }
             }
+
             filmy.removeFilm(id, databaseUtil);
-                JOptionPane.showMessageDialog(this, "Pomyślnie usunięto film");
+            JOptionPane.showMessageDialog(this, "Pomyślnie usunięto film");
         } catch (HibernateException e) {
             e.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Nie można usunąć filmu!");
+            JOptionPane.showMessageDialog(this, "Nie można usunąć filmu!");
         }
         showRemoveMovieWindow();
     }
@@ -565,35 +575,31 @@ public class MainWindow extends JFrame {
     public void onZwrocFilmButtonClicked() {
 
         //Zwroc film
-            window = windowFactory.getWindow(RETURN_MOVIE);
-         JLabel labelSucces = ((ReturnsMovieWindow) window).getReturnsMovieSucces();
-         JLabel labelError = ((ReturnsMovieWindow) window).getReturnsMovieError();
-        JTable lista = ((ShowMovieWindow) window).getTable();     
-         if (lista.getSelectedRow() != -1) {
+        window = windowFactory.getWindow(RETURN_MOVIE);
+        JTable lista = ((ShowMovieWindow) window).getTable();
+        if (lista.getSelectedRow() != -1) {
             if (lista.getValueAt(lista.getSelectedRow(), 4).toString().equalsIgnoreCase("Dostępny")) {
-                try{
-                Transakcja t = new Transakcja();
-                 t.setIdKlienta(user);
+                try {
+                    Transakcja t = new Transakcja();
+                    t.setIdKlienta(user);
                     t.setIdFilmu(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()));
                     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
                     Date date = new Date();
                     t.setDataTransakcji(date);
                     t.setTyp("ZW");
-                transakcje.addTransakcja(t, databaseUtil);
-                Film film = filmy.getFilm(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
-                film.setIlosc(film.getIlosc()+1);
-                filmy.editFilm(film, databaseUtil);
-                JOptionPane.showMessageDialog(this, "Zwrócono film");
-                }
-                catch(HibernateException he){
+                    transakcje.addTransakcja(t, databaseUtil);
+                    Film film = filmy.getFilm(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
+                    film.setIlosc(film.getIlosc() + 1);
+                    filmy.editFilm(film, databaseUtil);
+                    JOptionPane.showMessageDialog(this, "Zwrócono film");
+                } catch (HibernateException he) {
                     he.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Błąd zwrotu");
-                }finally{
-                    
-                    
+                    JOptionPane.showMessageDialog(this, "Błąd zwrotu");
+                } finally {
+
                 }
             }
-    }
+        }
     }
 
     public void onDodajGatunekButtonClicked() {
@@ -634,10 +640,10 @@ public class MainWindow extends JFrame {
             if (lista.getValueAt(lista.getSelectedRow(), 3).toString().equalsIgnoreCase("Wypożyczenie")) {
                 try {
                     transakcje.removeTransakcja(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
-            JOptionPane.showMessageDialog(this, "Usunięto");
+                    JOptionPane.showMessageDialog(this, "Usunięto");
                 } catch (HibernateException he) {
                     he.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Błąd, nie usunięto!");
+                    JOptionPane.showMessageDialog(this, "Błąd, nie usunięto!");
                 } finally {
                     label.setVisible(true);
                 }
@@ -658,10 +664,10 @@ public class MainWindow extends JFrame {
                     Transakcja transakcja = transakcje.getTransakcja(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
                     transakcja.setIdPracownika(user);
                     transakcje.editTransakcja(transakcja, databaseUtil);
-            JOptionPane.showMessageDialog(this, "Zatwierdzono");
+                    JOptionPane.showMessageDialog(this, "Zatwierdzono");
                 } catch (HibernateException he) {
                     he.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Błąd!");
+                    JOptionPane.showMessageDialog(this, "Błąd!");
                 }
             }
             showTransactionWindow();
@@ -676,9 +682,7 @@ public class MainWindow extends JFrame {
     public static MainWindow getInstance() {
         return instance;
     }
-    
-    
-    
+
     public static void main(String[] args) {
         MainWindow mainWindow = new MainWindow();
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
