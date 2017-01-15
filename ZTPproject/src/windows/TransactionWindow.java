@@ -74,6 +74,7 @@ public class TransactionWindow extends JPanel implements CustomWindowInterface {
         return this.rejectTransactionButton;
     }
 
+    @Override
     public JTable getTable() {
         return this.transactions;
     }

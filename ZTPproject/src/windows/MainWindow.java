@@ -169,7 +169,7 @@ public class MainWindow extends JFrame {
     }
 
     public void showTransactionWindow() {
-        window = windowFactory.getWindow("TRANSACTION");
+        window = windowFactory.getWindow(TRANSACTION);
         // wypelnienie listy transakcji
         ((TransactionWindow) window).getOutcomeLabel().setVisible(false);
 
@@ -468,6 +468,30 @@ public class MainWindow extends JFrame {
     public void onZatwierdzTransakcjeButtonClicked() {
 
         //Zatwierdz Transakcje
+         window = windowFactory.getWindow(TRANSACTION);
+         JLabel label = ((TransactionWindow)window).getOutcomeLabel();
+          JTable lista = ((TransactionWindow)window).getTable();
+        if (lista.getSelectedRow() != -1)
+        {
+            if (lista.getValueAt(lista.getSelectedRow(), 3).toString().equalsIgnoreCase("Wypożyczenie")) {
+                try {
+                   Transakcja transakcja= transakcje.getTransakcja(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
+                   transakcja.setIdTransakcji(user);
+                    transakcje.editTransakcja(transakcja, databaseUtil);
+                    label.setText("Zatwierdzono");
+                    label.setForeground(Color.green);
+                    label.setVisible(true);
+                }
+                  catch (HibernateException he) {
+                    he.printStackTrace();
+                    label.setText("Błąd");
+                    label.setForeground(Color.red);
+                    label.setVisible(true);
+                }
+            }
+            
+        }
+        
     }
 
     public static void main(String[] args) {
