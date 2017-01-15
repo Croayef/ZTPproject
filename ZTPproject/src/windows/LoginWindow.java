@@ -104,7 +104,7 @@ public class LoginWindow extends JPanel implements CustomWindowInterface {
     public void clear() {
         this.logField.setText("");
         this.passField.setText("");
-        this.errorField.setVisible(true);
+        this.errorField.setVisible(false);
     }
     
 }
