@@ -24,8 +24,8 @@ public class ShowMovieWindow extends JPanel implements CustomWindowInterface {
 
         scrollPane = new JScrollPane();
         showMovieButton = new JButton("Zamów film");
-        showMovieError = new JLabel("Nie wypożyczono");
-        showMovieSucces = new JLabel("Wypożyczono");
+        showMovieError = new JLabel();
+        showMovieSucces = new JLabel();
         moviesTable = new javax.swing.JTable();
         moviesTable.setAutoCreateRowSorter(true);
         this.setLayout(new GridBagLayout());
