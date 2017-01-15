@@ -561,6 +561,35 @@ public class MainWindow extends JFrame {
     public void onZwrocFilmButtonClicked() {
 
         //Zwroc film
+            window = windowFactory.getWindow(RETURN_MOVIE);
+         JLabel labelSucces = ((ReturnsMovieWindow) window).getReturnsMovieSucces();
+         JLabel labelError = ((ReturnsMovieWindow) window).getReturnsMovieError();
+        JTable lista = ((ShowMovieWindow) window).getTable();     
+         if (lista.getSelectedRow() != -1) {
+            if (lista.getValueAt(lista.getSelectedRow(), 4).toString().equalsIgnoreCase("Dostępny")) {
+                try{
+                Transakcja t = new Transakcja();
+                 t.setIdKlienta(user);
+                    t.setIdFilmu(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()));
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                    Date date = new Date();
+                    t.setDataTransakcji(date);
+                    t.setTyp("ZW");
+                transakcje.addTransakcja(t, databaseUtil);
+                Film film = filmy.getFilm(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
+                film.setIlosc(film.getIlosc()+1);
+                filmy.editFilm(film, databaseUtil);
+                labelSucces.setVisible(true);
+                }
+                catch(HibernateException he){
+                    he.printStackTrace();
+                    labelError.setVisible(true);
+                }finally{
+                    
+                    
+                }
+            }
+    }
     }
 
     public void onDodajGatunekButtonClicked() {
