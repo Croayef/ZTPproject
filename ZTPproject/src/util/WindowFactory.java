@@ -9,11 +9,14 @@ import windows.RemoveMovieWindow;
 import windows.ReturnsMovieWindow;
 import windows.ShowMovieWindow;
 import windows.TransactionWindow;
+import windows.WelcomeWindow;
 
 public class WindowFactory {
 
     public CustomWindowInterface getWindow(String windowType) {
         switch (windowType.toUpperCase()) {
+            case "WELCOME":
+                return WelcomeWindow.getInstance();
             case "ADD_MOVIE":
                 return AddMovieWindow.getInstance();
             case "SHOW_MOVIE":

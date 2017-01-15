@@ -56,4 +56,9 @@ public class AddGenreWindow extends JPanel implements CustomWindowInterface {
     public JButton getAddGenreButton() {
         return this.addGenreButton;
     }
+    
+    public void clear() {
+        this.nameLabel.setText("");
+    }
+    
 }

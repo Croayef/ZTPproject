@@ -11,7 +11,6 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.SpringLayout;
 
 public class AddMovieWindow extends JPanel implements CustomWindowInterface {
 
@@ -148,4 +147,11 @@ public class AddMovieWindow extends JPanel implements CustomWindowInterface {
     public JButton getAddMovieButton() {
         return this.addMovieButton;
     }
+    
+    public void clear() {
+        this.newMovieName.setText("");
+        this.newMovieYear.setText("");
+        this.newMovieQuantity.setText("");
+    }
+    
 }

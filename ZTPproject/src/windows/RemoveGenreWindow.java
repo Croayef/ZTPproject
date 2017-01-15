@@ -72,4 +72,8 @@ public class RemoveGenreWindow extends JPanel implements CustomWindowInterface {
         return removegenreButton;
     }
     
+    public void clear(){
+        
+    }
+    
 }

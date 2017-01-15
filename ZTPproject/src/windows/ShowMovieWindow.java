@@ -89,4 +89,8 @@ public class ShowMovieWindow extends JPanel implements CustomWindowInterface {
         return showMovieSucces;
     }
     
+    public void clear() {
+        
+    }
+    
 }

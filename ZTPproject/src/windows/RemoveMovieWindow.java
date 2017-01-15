@@ -84,7 +84,12 @@ public class RemoveMovieWindow extends JPanel implements CustomWindowInterface {
         return removemovieButton;
     }
 
-    public JTable getRemoveMovieTable() {
+    public JTable getTable() {
         return removemovieTable;
     }
+    
+    public void clear() {
+        
+    }
+    
 }

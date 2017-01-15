@@ -89,5 +89,8 @@ public class ReturnsMovieWindow extends JPanel implements CustomWindowInterface 
         return returnsMovieSuccess;
     }
     
+    public void clear(){
+        
+    }
     
 }

@@ -57,7 +57,8 @@ public class LoginWindow extends JPanel implements CustomWindowInterface {
 
         // ERROR LABEL
         constraints.gridx = 0;
-        constraints.gridy = 2;
+        constraints.gridy = 3;
+        constraints.gridwidth = 2;
         constraints.anchor = GridBagConstraints.LAST_LINE_START;
         this.add(errorField, constraints);
         errorField.setVisible(true);
@@ -73,6 +74,9 @@ public class LoginWindow extends JPanel implements CustomWindowInterface {
         // BORDER
         this.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(), "LOGOWANIE"));
+        
+        clear();
+        
     }
 
     public JLabel getErrorField() {
@@ -86,7 +90,22 @@ public class LoginWindow extends JPanel implements CustomWindowInterface {
         return instance;
     }
 
+    public JPasswordField getPasswordField() {
+        return this.passField;
+    }
+    
+    public JTextField getLoginField() {
+        return this.logField;
+    }
+
     public JButton getLoginButton() {
         return loginButton;
     }
+    
+    public void clear() {
+        this.logField.setText("");
+        this.passField.setText("");
+        this.errorField.setVisible(false);
+    }
+    
 }

@@ -81,4 +81,9 @@ public class TransactionWindow extends JPanel implements CustomWindowInterface {
     public JLabel getOutcomeLabel(){
         return this.outcomeLabel;
     }
+    
+    public void clear() {
+        
+    }
+    
 }

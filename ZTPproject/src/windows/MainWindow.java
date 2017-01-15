@@ -1,13 +1,16 @@
 package windows;
 
-import POJO.Film;
 import POJO.Nosnik;
 import POJO.Gatunek;
+import POJO.Klient;
+import POJO.Pracownik;
 import POJO.Rezyser;
 import POJO.Transakcja;
 import Proxy.FilmProxy;
 import Proxy.GatunekProxy;
+import Proxy.KlientProxy;
 import Proxy.NosnikProxy;
+import Proxy.PracownikProxy;
 import Proxy.RezyserProxy;
 import Proxy.TransakcjaProxy;
 import displayers.FilmBasic;
@@ -18,20 +21,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import org.hibernate.SessionFactory;
 import util.HibernateUtil;
 import util.WindowFactory;
-import java.util.List;
 import java.util.Vector;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JList;
@@ -40,7 +38,8 @@ import javax.swing.table.DefaultTableModel;
 
 public class MainWindow extends JFrame {
 
-    private static int view = 0;
+    private int user = 0;
+    private int role = -1; // 0 -admin, 1- user, 2- pracownik
     JPanel cards;
     final static String FIRSTCARD = "Card1";
     final static String SHOW_MOVIE = "SHOW_MOVIE";
@@ -51,6 +50,7 @@ public class MainWindow extends JFrame {
     final static String LOGIN = "LOGIN";
     final static String ADD_GENRE = "ADD_GENRE";
     final static String REMOVE_GENRE = "REMOVE_GENRE";
+    final static String WELCOME = "WELCOME";
 
     private FilmProxy filmy;
     private RezyserProxy rezyser;
@@ -58,24 +58,37 @@ public class MainWindow extends JFrame {
     private NosnikProxy nosniki;
     private GatunekProxy gatunki;
     private TransakcjaProxy transakcje;
+    private KlientProxy klienci;
+    private PracownikProxy pracownicy;
     private WindowFactory windowFactory;
     private SessionFactory databaseUtil = HibernateUtil.getSessionFactory();
     CustomWindowInterface window;
 
     public MainWindow() {
+        this.filmy = new FilmProxy();
+        this.rezyser = new RezyserProxy();
+        this.movieDisplayer = new FilmBasic();
+        this.nosniki = new NosnikProxy();
+        this.gatunki = new GatunekProxy();
+        this.transakcje = new TransakcjaProxy();
+        this.klienci = new KlientProxy();
+        this.pracownicy = new PracownikProxy();
+        this.windowFactory = new WindowFactory();
         prepareMenuBar();
         prepareComponents();
     }
 
-    public MainWindow(FilmProxy filmy, RezyserProxy rezyser, FilmDisplayer movieDisplayer, NosnikProxy nosniki, GatunekProxy gatunki, TransakcjaProxy transakcje, WindowFactory windowFactory) {
-        this.filmy = filmy;
-        this.rezyser = rezyser;
+    public MainWindow(FilmDisplayer movieDisplayer) {
         this.movieDisplayer = movieDisplayer;
-        this.nosniki = nosniki;
-        this.gatunki = gatunki;
-        this.transakcje = transakcje;
-        this.windowFactory = windowFactory;
-
+        this.filmy = new FilmProxy();
+        this.rezyser = new RezyserProxy();
+        this.movieDisplayer = new FilmBasic();
+        this.nosniki = new NosnikProxy();
+        this.gatunki = new GatunekProxy();
+        this.transakcje = new TransakcjaProxy();
+        this.klienci = new KlientProxy();
+        this.pracownicy = new PracownikProxy();
+        this.windowFactory = new WindowFactory();
         prepareMenuBar();
         prepareComponents();
 
@@ -155,8 +168,8 @@ public class MainWindow extends JFrame {
     public void showTransactionWindow() {
         window = windowFactory.getWindow("TRANSACTION");
         // wypelnienie listy transakcji
-        ((TransactionWindow)window).getOutcomeLabel().setVisible(false);
-        
+        ((TransactionWindow) window).getOutcomeLabel().setVisible(false);
+
         JTable transactions = window.getTable();
         Vector<String> tableHeaders = new Vector<>();
         Vector tableData = new Vector<>();
@@ -181,10 +194,6 @@ public class MainWindow extends JFrame {
 
             tableData.add(oneRow);
         }
-        System.out.println(transactions);
-        System.out.println(tableData);
-        System.out.println(tableHeaders);
-
         transactions.setModel(new DefaultTableModel(tableData, tableHeaders) {
             public boolean isCellEditable(int rowIndex, int mColIndex) {
                 return false;
@@ -235,9 +244,9 @@ public class MainWindow extends JFrame {
     }
 
     public void showRemoveMovieWindow() {
-         window = windowFactory.getWindow("REMOVE_MOVIE");
-         movieDisplayer.showFilmy(window.getTable(), filmy.getEachFilm(databaseUtil), rezyser.getEachRezyser(databaseUtil), nosniki.getEachNosnik(databaseUtil), gatunki.getEachGatunek(databaseUtil), null);
-         
+        window = windowFactory.getWindow("REMOVE_MOVIE");
+        movieDisplayer.showFilmy(window.getTable(), filmy.getEachFilm(databaseUtil), rezyser.getEachRezyser(databaseUtil), nosniki.getEachNosnik(databaseUtil), gatunki.getEachGatunek(databaseUtil), null);
+
     }
 
     private void onDodajGatunekClicked(ActionEvent e) {
@@ -255,16 +264,26 @@ public class MainWindow extends JFrame {
 
     public void showRemoveGenreWindow() {
         window = windowFactory.getWindow("REMOVE_GENRE");
-        JList genres = ((RemoveGenreWindow) window).getRemoveGenreTable();
-        
+        JTable genres = ((RemoveGenreWindow) window).getRemoveGenreTable();
         genres.removeAll();
-        DefaultListModel listModel = new DefaultListModel();
-        listModel.removeAllElements();
-        for (Gatunek g : gatunki.getEachGatunek(databaseUtil))
-        {
-            listModel.addElement(g.getIdGatunku() + ". " + g.getNazwa());
+        Vector<String> tableHeaders = new Vector<>();
+        Vector tableData = new Vector<>();
+        tableHeaders.add("Id");
+        tableHeaders.add("Nazwa Gatunku");
+        for (Gatunek g : gatunki.getEachGatunek(databaseUtil)) {
+            Vector<Object> oneRow = new Vector<>();
+            oneRow.add(g.getIdGatunku());
+            oneRow.add(g.getNazwa());
+            tableData.add(oneRow);
         }
-        genres.setModel(listModel);
+        genres.setModel(new DefaultTableModel(tableData, tableHeaders) {
+            public boolean isCellEditable(int rowIndex, int mColIndex) {
+                return false;
+            }
+        });
+
+        genres.removeColumn(genres.getColumnModel().getColumn(0));
+
     }
 
     private void onBazaFilmowClicked(MouseEvent e) {
@@ -281,7 +300,9 @@ public class MainWindow extends JFrame {
 
     private void onWylogujClicked(MouseEvent e) {
         // wylogowanie i zmiana widoku na LoginWindow
-        //wyloguuuuj
+        windowFactory.getWindow("LOGIN").clear();
+        this.user = 0;
+        this.role = -1;
         ((CardLayout) cards.getLayout()).show(cards, LOGIN);
     }
 
@@ -289,49 +310,52 @@ public class MainWindow extends JFrame {
         CustomWindowInterface card;
         cards = new JPanel(new CardLayout());
 
-        card = windowFactory.getWindow("LOGIN");
+        card = windowFactory.getWindow(LOGIN);
         ((LoginWindow) card).getLoginButton().addActionListener((ActionEvent e) -> {
             onZalogujButtonClicked();
         });
         cards.add((JPanel) card, LOGIN);
 
-        card = windowFactory.getWindow("SHOW_MOVIE");
+        card = windowFactory.getWindow(WELCOME);
+        cards.add((JPanel)card, WELCOME);
+        
+        card = windowFactory.getWindow(SHOW_MOVIE);
         ((ShowMovieWindow) card).getShowMovieButton().addActionListener((ActionEvent e) -> {
             onZamowButtonClicked();
         });
         cards.add((JPanel) card, SHOW_MOVIE);
 
-        card = windowFactory.getWindow("ADD_MOVIE");
+        card = windowFactory.getWindow(ADD_MOVIE);
         ((AddMovieWindow) card).getAddMovieButton().addActionListener((ActionEvent e) -> {
             onDodajFilmButtonClicked();
         });
         cards.add((JPanel) card, ADD_MOVIE);
 
-        card = windowFactory.getWindow("REMOVE_MOVIE");
+        card = windowFactory.getWindow(REMOVE_MOVIE);
         ((RemoveMovieWindow) card).getRemoveMovieButton().addActionListener((ActionEvent e) -> {
             onUsunFilmButtonClicked();
         });
         cards.add((JPanel) card, REMOVE_MOVIE);
 
-        card = windowFactory.getWindow("RETURN_MOVIE");
+        card = windowFactory.getWindow(RETURN_MOVIE);
         ((ReturnsMovieWindow) card).getReturnsMovieButton().addActionListener((ActionEvent e) -> {
             onZwrocFilmButtonClicked();
         });
         cards.add((JPanel) card, RETURN_MOVIE);
 
-        card = windowFactory.getWindow("ADD_GENRE");
+        card = windowFactory.getWindow(ADD_GENRE);
         ((AddGenreWindow) card).getAddGenreButton().addActionListener((ActionEvent e) -> {
             onDodajGatunekButtonClicked();
         });
         cards.add((JPanel) card, ADD_GENRE);
 
-        card = windowFactory.getWindow("REMOVE_GENRE");
+        card = windowFactory.getWindow(REMOVE_GENRE);
         ((RemoveGenreWindow) card).getRemoveGenreButton().addActionListener((ActionEvent e) -> {
             onUsunGatunekButtonClicked();
         });
         cards.add((JPanel) card, REMOVE_GENRE);
 
-        card = windowFactory.getWindow("TRANSACTION");
+        card = windowFactory.getWindow(TRANSACTION);
         ((TransactionWindow) card).getRejectTransactionButton().addActionListener((ActionEvent e) -> {
             onOdrzucTransakcjeButtonClicked();
         });
@@ -346,6 +370,40 @@ public class MainWindow extends JFrame {
     public void onZalogujButtonClicked() {
 
         //Zaloguj
+        window = windowFactory.getWindow(LOGIN);
+        String pass = new String(((LoginWindow) window).getPasswordField().getPassword());
+        String login = ((LoginWindow) window).getLoginField().getText();
+        ((LoginWindow) window).getErrorField().setVisible(false);
+        if (!login.trim().equals("") && pass.length() > 0) {
+
+            for (Klient k : klienci.getEachKlient(databaseUtil)) {
+                if (k.getHaslo().equals(pass) && k.getLogin().equals(login)) {
+                    this.user = k.getIdKlienta();
+                    this.role = 1;
+                    break;
+                }
+            }
+            if (this.role < 0) {
+                for (Pracownik p : pracownicy.getEachPracownik(databaseUtil)) {
+                    if (p.getLogin().equals(login) && p.getHaslo().equals(pass)) {
+                        this.user = p.getIdPracownika();
+                        if (p.getIdStanowiska() == 1) {
+                            this.role = 0;
+                        } else {
+                            this.role = 2;
+                        }
+                        break;
+                    }
+                }
+            }
+            if (this.role < 0) {
+                ((LoginWindow) window).getErrorField().setVisible(true);
+            } else {
+                ((CardLayout) cards.getLayout()).show(cards, WELCOME);
+            }
+        } else {
+            ((LoginWindow) window).getErrorField().setVisible(true);
+        }
     }
 
     public void onZamowButtonClicked() {
@@ -389,12 +447,7 @@ public class MainWindow extends JFrame {
     }
 
     public static void main(String[] args) {
-        MainWindow mainWindow = new MainWindow(
-                new FilmProxy(), new RezyserProxy(),
-                new FilmBasic(), new NosnikProxy(),
-                new GatunekProxy(), new TransakcjaProxy(),
-                new WindowFactory()
-        );
+        MainWindow mainWindow = new MainWindow();
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainWindow.pack();
         mainWindow.setVisible(true);
