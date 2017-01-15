@@ -546,9 +546,9 @@ public class MainWindow extends JFrame {
             
             for(GatunekFilm gf : gatunkiFilmy.getEachGatunekFilm(databaseUtil))
             {
-                if(gf.getId().equals(id))
+                if(gf.getId().getIdFilmu() == id)
                 {
-          // pozdro          gatunkiFilmy.removeGatunekFilm(gf.getId(), databaseUtil);
+                    gatunkiFilmy.removeGatunekFilm(id, databaseUtil);
                 }
             }
             filmy.removeFilm(id, databaseUtil);
