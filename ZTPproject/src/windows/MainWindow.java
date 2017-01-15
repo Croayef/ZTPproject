@@ -427,8 +427,18 @@ public class MainWindow extends JFrame {
     }
 
     public void onUsunFilmButtonClicked() {
-
-        //Usun film
+        window = windowFactory.getWindow(REMOVE_MOVIE);
+        ((RemoveMovieWindow) window).getRemoveMovieSucces().setVisible(false);
+        ((RemoveMovieWindow) window).getRemoveMovieError().setVisible(false);
+        try{
+            JTable lista = ((RemoveMovieWindow) window).getTable();
+            int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
+            filmy.removeFilm(id, databaseUtil);
+            ((RemoveMovieWindow) window).getRemoveMovieSucces().setVisible(true);
+        } catch (HibernateException e) {
+            ((RemoveMovieWindow) window).getRemoveMovieError().setVisible(true);
+        }
+        showRemoveMovieWindow();
     }
 
     public void onZwrocFilmButtonClicked() {
