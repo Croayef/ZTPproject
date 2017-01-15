@@ -79,6 +79,7 @@ public class MainWindow extends JFrame {
     private WindowFactory windowFactory;
     private SessionFactory databaseUtil = HibernateUtil.getSessionFactory();
     JMenuBar menuBar;
+    JMenuItem showWypozyczone;
     CustomWindowInterface window;
 
     public MainWindow() {
@@ -162,11 +163,21 @@ public class MainWindow extends JFrame {
         administracja.add(admGatunek);
 
         JMenu bazaFilmow = new JMenu("Baza Filmów");
-        bazaFilmow.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent evt) {
-                onBazaFilmowClicked(evt);
+        JMenuItem showBazaFilmow = new JMenuItem("Przeglądaj");
+        showBazaFilmow.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onBazaFilmowClicked(e);
             }
         });
+        showWypozyczone = new JMenuItem("Zwróć Film");
+        showWypozyczone.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                onZwrocFilmClicked(e);
+            }
+        });
+        bazaFilmow.add(showBazaFilmow);
+        bazaFilmow.add(showWypozyczone);
+        
 
         JMenu wyloguj = new JMenu("Wyloguj");
         wyloguj.addMouseListener(new MouseAdapter() {
@@ -314,21 +325,29 @@ public class MainWindow extends JFrame {
 
     }
 
-    private void onBazaFilmowClicked(MouseEvent e) {
+    private void onBazaFilmowClicked(ActionEvent e) {
         // zmiana widoku na ShowMovieWindow
         showMovieWindow();
         ((CardLayout) cards.getLayout()).show(cards, SHOW_MOVIE);
     }
 
     public void showMovieWindow() {
-        window = windowFactory.getWindow("SHOW_MOVIE");
+        window = windowFactory.getWindow(SHOW_MOVIE);
         // wypelnienie tabeli filmow
         movieDisplayer.showFilmy(window.getTable(), filmy.getEachFilm(databaseUtil), rezyser.getEachRezyser(databaseUtil), nosniki.getEachNosnik(databaseUtil), gatunki.getEachGatunek(databaseUtil), null);
     }
 
+    
+    private void onZwrocFilmClicked(ActionEvent e) {
+        
+        window = windowFactory.getWindow(RETURN_MOVIE);
+        
+        
+    }
+    
     private void onWylogujClicked(MouseEvent e) {
         // wylogowanie i zmiana widoku na LoginWindow
-        windowFactory.getWindow("LOGIN").clear();
+        windowFactory.getWindow(LOGIN).clear();
         this.user = 0;
         this.role = -1;
         menuBar.setVisible(false);
@@ -408,10 +427,12 @@ public class MainWindow extends JFrame {
                 if (k.getHaslo().equals(pass) && k.getLogin().equals(login)) {
                     this.user = k.getIdKlienta();
                     this.role = 1;
+                    this.showWypozyczone.setVisible(true);
                     break;
                 }
             }
             if (this.role < 0) {
+                this.showWypozyczone.setVisible(false);
                 for (Pracownik p : pracownicy.getEachPracownik(databaseUtil)) {
                     if (p.getLogin().equals(login) && p.getHaslo().equals(pass)) {
                         this.user = p.getIdPracownika();
