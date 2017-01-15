@@ -1,7 +1,6 @@
 package Proxy;
 
 import DAO.FilmDAO;
-import DAOInterfaces.FilmDAOInterface;
 import POJO.Film;
 import java.util.List;
 import org.hibernate.SessionFactory;
@@ -11,8 +10,13 @@ public class FilmProxy implements FilmDAOInterface {
 
     private FilmDAOInterface film; 
     
-    public void addFilm(Film film, SessionFactory sessionFactory) {
+    
+    public FilmProxy() {
         this.film = new FilmDAO();
+    }
+    
+    public void addFilm(Film film, SessionFactory sessionFactory) {
+        this.film.addFilm(film, sessionFactory);
     }
 
     
@@ -32,7 +36,7 @@ public class FilmProxy implements FilmDAOInterface {
 
     
     public List<Film> getEachFilm(SessionFactory sessionFactory) {
-       return this.getEachFilm(sessionFactory);
+       return this.film.getEachFilm(sessionFactory);
     }
     
 }

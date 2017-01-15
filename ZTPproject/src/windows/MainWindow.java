@@ -37,11 +37,15 @@ public class MainWindow extends JFrame {
     private static int view = 0;
     JPanel cards;
     final static String FIRSTCARD = "Card1";
-    final static String SECONDCARD = "Card2";
     final static String SHOW_MOVIE = "SHOW_MOVIE";
     final static String ADD_MOVIE = "ADD_MOVIE";
     final static String REMOVE_MOVIE = "REMOVE_MOVIE";
-    
+    final static String RETURN_MOVIE = "RETURN_MOVIE";
+    final static String TRANSACTION = "TRANSACTION";
+    final static String LOGIN = "LOGIN";
+    final static String ADD_GENRE = "ADD_GENRE";
+    final static String REMOVE_GENRE = "REMOVE_GENRE";
+
     private FilmProxy filmy;
     private RezyserProxy rezyser;
     private FilmDisplayer movieDisplayer;
@@ -98,14 +102,14 @@ public class MainWindow extends JFrame {
 
         JMenu admGatunek = new JMenu("Gatunek");
         JMenuItem admGatunekDodaj = new JMenuItem("Dodaj Gatunek");
-        admGatunekDodaj.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent evt) {
+        admGatunekDodaj.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 onDodajGatunekClicked(evt);
             }
         });
         JMenuItem admGatunekUsun = new JMenuItem("Usuń Gatunek");
-        admGatunekUsun.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent evt) {
+        admGatunekUsun.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
                 onUsunGatunekClicked(evt);
             }
         });
@@ -136,32 +140,38 @@ public class MainWindow extends JFrame {
 
     private void onTransakcjeClicked(MouseEvent e) {
         // zmiana widoku na TransactionWindow
+        showTransactionWindow();
+        ((CardLayout) cards.getLayout()).show(cards, TRANSACTION);
+    }
+
+    public void showTransactionWindow() {
+        window = windowFactory.getWindow("TRANSACTION");
+        // wypelnienie listy transakcji
     }
 
     private void onDodajFilmClicked(ActionEvent e) {
         // zmiana widoku na AddMovieWindow
-        ((CardLayout) cards.getLayout()).show(cards, ADD_MOVIE);
         showAddMovieWindow();
-        
+        ((CardLayout) cards.getLayout()).show(cards, ADD_MOVIE);
     }
-    
+
     public void showAddMovieWindow() {
         window = windowFactory.getWindow("ADD_MOVIE");
         // wypełnienie listy nosników, reżyserów i gatunków do wyboru
         JComboBox carriers = ((AddMovieWindow) window).getCarriers();
         JComboBox directors = ((AddMovieWindow) window).getDirectors();
         JList genres = ((AddMovieWindow) window).getGenreList();
-        
+
         carriers.removeAllItems();
         for (Nosnik n : nosniki.getEachNosnik(databaseUtil)) {
             carriers.addItem(n.getTyp());
         }
-        
+
         directors.removeAllItems();
         for (Rezyser r : rezyser.getEachRezyser(databaseUtil)) {
             directors.addItem(r.getImie() + " " + r.getNazwisko());
         }
-        
+
         genres.removeAll();
         DefaultListModel listModel = new DefaultListModel();
         listModel.removeAllElements();
@@ -171,113 +181,29 @@ public class MainWindow extends JFrame {
         genres.setModel(listModel);
 
     }
-    
+
     private void onUsunFilmClicked(ActionEvent e) {
         // zmiana widoku na RemoveMovieWindow
+        showRemoveMovieWindow();
+        ((CardLayout) cards.getLayout()).show(cards, REMOVE_MOVIE);
     }
-
-    private void onDodajGatunekClicked(MouseEvent e) {
-        // zmiana widoku na AddGenreWIndow
-    }
-
-    private void onUsunGatunekClicked(MouseEvent e) {
-        // zmiana widoku na RemoveGenreWindow
-    }
-
-    private void onBazaFilmowClicked(MouseEvent e) {
-        // zmiana widoku na ShowMovieWindow
-
-        //to tylko w ramach testu:
-        view = 1;
-        showMovieWindow();
-        ((CardLayout) cards.getLayout()).show(cards, SHOW_MOVIE);
-    }
-
-    private void onWylogujClicked(MouseEvent e) {
-        // wylogowanie i zmiana widoku na LoginWindow
-    }
-
-    private void prepareComponents() {
-        JPanel mainPane = new JPanel();
-        JButton changeButton = new JButton("Change View");
-
-        changeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                CardLayout cl = (CardLayout) (cards.getLayout());
-                if (view == 0) {
-                    view = 1;
-                    cl.show(cards, SECONDCARD);
-                } else {
-                    view = 0;
-                    cl.show(cards, FIRSTCARD);
-                }
-            }
-        });
-
-        mainPane.add(changeButton);
-
-        JPanel card1 = new JPanel();
-        card1.add(new JButton("Button 1"));
-        card1.add(new JButton("Button 2"));
-        card1.add(new JButton("Button 3"));
-
-        CustomWindowInterface card;
-        cards = new JPanel(new CardLayout());
-        cards.add(card1, FIRSTCARD);
-        card =  windowFactory.getWindow("SHOW_MOVIE");
-        ((ShowMovieWindow)card).getShowMovieButton().addActionListener((ActionEvent e) -> {
-            onZamowButtonClicked();
-        });
-        cards.add((JPanel)card, SHOW_MOVIE);
-        card = windowFactory.getWindow("ADD_MOVIE");
-        ((AddMovieWindow)card).getAddMovieButton().addActionListener((ActionEvent e) -> {
-            onDodajFilmButtonClicked();
-        });
-        cards.add((JPanel)card, ADD_MOVIE);
-        card = windowFactory.getWindow("REMOVE_MOVIE");
-        ((RemoveMovieWindow)card).getRemoveMovieButton().addActionListener((ActionEvent e) -> {
-            onUsunFilmButtonClicked();
-        });
-        cards.add((JPanel)card, REMOVE_MOVIE);
-
-        this.add(mainPane, BorderLayout.PAGE_START);
-        this.add(cards, BorderLayout.CENTER);
-    }
-    
-    public void onZamowButtonClicked() {
-        
-        //Zamow film
-        
-    }
-    
-    public void onDodajFilmButtonClicked() {
-        
-        //Dodaj film
-        
-    }
-    
-    public void onUsunFilmButtonClicked() {
-        
-        //Dodaj film
-        
-    }
-    
-    
-    public void showMovieWindow() {
-        window = windowFactory.getWindow("SHOW_MOVIE");
-        // wypelnienie tabeli filmow
-        // movieDisplayer.showFilmy(window.getTable(), filmy.getEachFilm(databaseUtil), rezyser.getEachRezyser(databaseUtil), nosniki.getEachNosnik(databaseUtil), gatunki.getEachGatunek(databaseUtil), null);
-    }
-
-    
 
     public void showRemoveMovieWindow() {
-        window = windowFactory.getWindow("REMOVE_MOVIE");
+
         // wypełnienie listy nosników, reżyserów i gatunków do wyboru
     }
 
-    public void showAddGenreWindow() {
+    private void onDodajGatunekClicked(ActionEvent e) {
+        // zmiana widoku na AddGenreWIndow
+        System.out.println("windows.MainWindow.onDodajGatunekClicked()");
+        ((CardLayout) cards.getLayout()).show(cards, ADD_GENRE);
+    }
 
+    private void onUsunGatunekClicked(ActionEvent e) {
+        // zmiana widoku na RemoveGenreWindow
+        System.out.println("windows.MainWindow.onUsunGatunekClicked()");
+        showRemoveGenreWindow();
+        ((CardLayout) cards.getLayout()).show(cards, REMOVE_GENRE);
     }
 
     public void showRemoveGenreWindow() {
@@ -285,12 +211,127 @@ public class MainWindow extends JFrame {
         // wypelnienie listy gatunkow do wyboru
     }
 
-    public void showTransactionWindow() {
-        window = windowFactory.getWindow("TRANSACTION");
-        // wypelnienie listy transakcji
+    private void onBazaFilmowClicked(MouseEvent e) {
+        // zmiana widoku na ShowMovieWindow
+        showMovieWindow();
+        ((CardLayout) cards.getLayout()).show(cards, SHOW_MOVIE);
     }
 
-    
+    public void showMovieWindow() {
+        window = windowFactory.getWindow("SHOW_MOVIE");
+        // wypelnienie tabeli filmow
+        movieDisplayer.showFilmy(window.getTable(), filmy.getEachFilm(databaseUtil), rezyser.getEachRezyser(databaseUtil), nosniki.getEachNosnik(databaseUtil), gatunki.getEachGatunek(databaseUtil), null);
+    }
+
+    private void onWylogujClicked(MouseEvent e) {
+        // wylogowanie i zmiana widoku na LoginWindow
+        //wyloguuuuj
+        ((CardLayout) cards.getLayout()).show(cards, LOGIN);
+    }
+
+    private void prepareComponents() {
+        CustomWindowInterface card;
+        cards = new JPanel(new CardLayout());
+
+        card = windowFactory.getWindow("LOGIN");
+        ((LoginWindow) card).getLoginButton().addActionListener((ActionEvent e) -> {
+            onZalogujButtonClicked();
+        });
+        cards.add((JPanel) card, LOGIN);
+
+        card = windowFactory.getWindow("SHOW_MOVIE");
+        ((ShowMovieWindow) card).getShowMovieButton().addActionListener((ActionEvent e) -> {
+            onZamowButtonClicked();
+        });
+        cards.add((JPanel) card, SHOW_MOVIE);
+
+        card = windowFactory.getWindow("ADD_MOVIE");
+        ((AddMovieWindow) card).getAddMovieButton().addActionListener((ActionEvent e) -> {
+            onDodajFilmButtonClicked();
+        });
+        cards.add((JPanel) card, ADD_MOVIE);
+
+        card = windowFactory.getWindow("REMOVE_MOVIE");
+        ((RemoveMovieWindow) card).getRemoveMovieButton().addActionListener((ActionEvent e) -> {
+            onUsunFilmButtonClicked();
+        });
+        cards.add((JPanel) card, REMOVE_MOVIE);
+
+        card = windowFactory.getWindow("RETURN_MOVIE");
+        ((ReturnsMovieWindow) card).getReturnsMovieButton().addActionListener((ActionEvent e) -> {
+            onZwrocFilmButtonClicked();
+        });
+        cards.add((JPanel) card, RETURN_MOVIE);
+
+        card = windowFactory.getWindow("ADD_GENRE");
+        ((AddGenreWindow) card).getAddGenreButton().addActionListener((ActionEvent e) -> {
+            onDodajGatunekButtonClicked();
+        });
+        cards.add((JPanel) card, ADD_GENRE);
+
+        card = windowFactory.getWindow("REMOVE_GENRE");
+        ((RemoveGenreWindow) card).getRemoveGenreButton().addActionListener((ActionEvent e) -> {
+            onUsunGatunekButtonClicked();
+        });
+        cards.add((JPanel) card, REMOVE_GENRE);
+
+        card = windowFactory.getWindow("TRANSACTION");
+        ((TransactionWindow) card).getRejectTransactionButton().addActionListener((ActionEvent e) -> {
+            onOdrzucTransakcjeButtonClicked();
+        });
+        ((TransactionWindow) card).getApproveTransactionButton().addActionListener((ActionEvent e) -> {
+            onZatwierdzTransakcjeButtonClicked();
+        });
+        cards.add((JPanel) card, TRANSACTION);
+
+        this.add(cards, BorderLayout.CENTER);
+    }
+
+    public void onZalogujButtonClicked() {
+
+        //Zaloguj
+    }
+
+    public void onZamowButtonClicked() {
+
+        //Zamow film
+    }
+
+    public void onDodajFilmButtonClicked() {
+
+        //Dodaj film
+    }
+
+    public void onUsunFilmButtonClicked() {
+
+        //Usun film
+    }
+
+    public void onZwrocFilmButtonClicked() {
+
+        //Zwroc film
+    }
+
+    public void onDodajGatunekButtonClicked() {
+
+        //Dodaj gatunek
+    }
+
+    public void onUsunGatunekButtonClicked() {
+
+        //Usun gatunek
+    }
+
+    public void onOdrzucTransakcjeButtonClicked() {
+
+        //Odrzuc Transakcje
+    }
+
+    public void onZatwierdzTransakcjeButtonClicked() {
+
+        //Zatwierdz Transakcje
+    }
+
     public static void main(String[] args) {
         MainWindow mainWindow = new MainWindow(
                 new FilmProxy(), new RezyserProxy(),

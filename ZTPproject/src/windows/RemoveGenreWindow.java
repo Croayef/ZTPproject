@@ -49,7 +49,7 @@ public class RemoveGenreWindow extends JPanel implements CustomWindowInterface {
 
         // BORDER
         this.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), "USUŃ FILM"));
+                BorderFactory.createEtchedBorder(), "Usuń Gatunek"));
 
     }
 
@@ -60,11 +60,16 @@ public class RemoveGenreWindow extends JPanel implements CustomWindowInterface {
         return instance;
     }
 
-    public JLabel getRemovegenreLabel() {
+    public JLabel getRemoveGenreLabel() {
         return removegenreLabel;
     }
 
-    public JTable getRemovegenreTable() {
+    public JTable getRemoveGenreTable() {
         return removegenreTable;
     }
+    
+    public JButton getRemoveGenreButton() {
+        return removegenreButton;
+    }
+    
 }

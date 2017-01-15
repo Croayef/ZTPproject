@@ -46,9 +46,11 @@ public class FilmDAO implements FilmDAOInterface {
     public List<Film> getEachFilm(SessionFactory sessionFactory) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
+        System.out.println("DAO.FilmDAO.getEachFilm()");
         List<Film> movies = (List<Film>) session.createCriteria(Film.class).list();
         transaction.commit();
         session.close();
+        System.out.println("DAO.FilmDAO.getEachFilm() dziala");
         return movies;
     }
 }

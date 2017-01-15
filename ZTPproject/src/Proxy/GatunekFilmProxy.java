@@ -31,7 +31,7 @@ public class GatunekFilmProxy implements GatunekFilmDAOInterface {
     }
 
     public List<GatunekFilm> getEachGatunekFilm(SessionFactory sessionFactory) {
-        return this.getEachGatunekFilm(sessionFactory);
+        return this.gatunekFilm.getEachGatunekFilm(sessionFactory);
     }
 
 }
