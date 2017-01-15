@@ -200,7 +200,7 @@ public class MainWindow extends JFrame {
         ((CardLayout) cards.getLayout()).show(cards, TRANSACTION);
     }
 
-    public void showTransactionWindow() {
+    private void showTransactionWindow() {
         window = windowFactory.getWindow(TRANSACTION);
         // wypelnienie listy transakcji
         JTable transactions = window.getTable();
@@ -249,7 +249,7 @@ public class MainWindow extends JFrame {
         ((CardLayout) cards.getLayout()).show(cards, ADD_MOVIE);
     }
 
-    public void showAddMovieWindow() {
+    private void showAddMovieWindow() {
         window = windowFactory.getWindow("ADD_MOVIE");
         // wypełnienie listy nosników, reżyserów i gatunków do wyboru
         JComboBox carriers = ((AddMovieWindow) window).getCarriers();
@@ -282,7 +282,7 @@ public class MainWindow extends JFrame {
         ((CardLayout) cards.getLayout()).show(cards, REMOVE_MOVIE);
     }
 
-    public void showRemoveMovieWindow() {
+    private void showRemoveMovieWindow() {
         window = windowFactory.getWindow("REMOVE_MOVIE");
         movieDisplayer.showFilmy(window.getTable(), filmy.getEachFilm(databaseUtil), rezyser.getEachRezyser(databaseUtil), nosniki.getEachNosnik(databaseUtil), gatunki.getEachGatunek(databaseUtil), null);
 
@@ -301,7 +301,7 @@ public class MainWindow extends JFrame {
         ((CardLayout) cards.getLayout()).show(cards, REMOVE_GENRE);
     }
 
-    public void showRemoveGenreWindow() {
+    private void showRemoveGenreWindow() {
         window = windowFactory.getWindow("REMOVE_GENRE");
         JTable genres = ((RemoveGenreWindow) window).getRemoveGenreTable();
         genres.removeAll();
@@ -331,7 +331,7 @@ public class MainWindow extends JFrame {
         ((CardLayout) cards.getLayout()).show(cards, SHOW_MOVIE);
     }
 
-    public void showMovieWindow() {
+    private void showMovieWindow() {
         window = windowFactory.getWindow(SHOW_MOVIE);
         // wypelnienie tabeli filmow
         movieDisplayer.showFilmy(window.getTable(), filmy.getEachFilm(databaseUtil), rezyser.getEachRezyser(databaseUtil), nosniki.getEachNosnik(databaseUtil), gatunki.getEachGatunek(databaseUtil), null);
@@ -340,7 +340,13 @@ public class MainWindow extends JFrame {
     
     private void onZwrocFilmClicked(ActionEvent e) {
         
-        window = windowFactory.getWindow(RETURN_MOVIE);
+        showReturnMovieWindow();
+        ((CardLayout) cards.getLayout()).show(cards, RETURN_MOVIE);
+    }
+    
+    private void showReturnMovieWindow() {
+        // wypelnianie tabeli z wypozyczonymi filmami:
+        
         
         
     }
