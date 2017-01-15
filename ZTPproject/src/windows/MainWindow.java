@@ -9,9 +9,11 @@ import POJO.Klient;
 import POJO.Pracownik;
 import POJO.Rezyser;
 import POJO.Transakcja;
+import POJO.GatunekFilm;
 import Proxy.FilmProxy;
 import Proxy.GatunekFilmProxy;
 import Proxy.GatunekProxy;
+import Proxy.GatunekFilmProxy;
 import Proxy.KlientProxy;
 import Proxy.NosnikProxy;
 import Proxy.PracownikProxy;
@@ -85,6 +87,7 @@ public class MainWindow extends JFrame {
         this.movieDisplayer = new FilmBasic();
         this.nosniki = new NosnikProxy();
         this.gatunki = new GatunekProxy();
+        this.gatunkiFilmy = new GatunekFilmProxy();
         this.transakcje = new TransakcjaProxy();
         this.klienci = new KlientProxy();
         this.pracownicy = new PracownikProxy();
@@ -101,6 +104,7 @@ public class MainWindow extends JFrame {
         this.movieDisplayer = new FilmBasic();
         this.nosniki = new NosnikProxy();
         this.gatunki = new GatunekProxy();
+        this.gatunkiFilmy = new GatunekFilmProxy();
         this.transakcje = new TransakcjaProxy();
         this.klienci = new KlientProxy();
         this.pracownicy = new PracownikProxy();
@@ -539,6 +543,14 @@ public class MainWindow extends JFrame {
         try {
             JTable lista = ((RemoveMovieWindow) window).getTable();
             int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
+            
+            for(GatunekFilm gf : gatunkiFilmy.getEachGatunekFilm(databaseUtil))
+            {
+                if(gf.getId().equals(id))
+                {
+                    gatunkiFilmy.removeGatunekFilm(gf.getId(), databaseUtil);
+                }
+            }
             filmy.removeFilm(id, databaseUtil);
             ((RemoveMovieWindow) window).getRemoveMovieSuccess().setVisible(true);
         } catch (HibernateException e) {
@@ -570,7 +582,7 @@ public class MainWindow extends JFrame {
 
         try {
             JTable lista = ((RemoveGenreWindow) window).getRemoveGenreTable();
-            int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
+            int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());            
             gatunki.removeGatunek(id, databaseUtil);
             out.setText("Pomyślnie usunięto gatunek!");
             out.setForeground(Color.green);
