@@ -29,7 +29,9 @@ import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -177,7 +179,6 @@ public class MainWindow extends JFrame {
         });
         bazaFilmow.add(showBazaFilmow);
         bazaFilmow.add(showWypozyczone);
-        
 
         JMenu wyloguj = new JMenu("Wyloguj");
         wyloguj.addMouseListener(new MouseAdapter() {
@@ -337,20 +338,29 @@ public class MainWindow extends JFrame {
         movieDisplayer.showFilmy(window.getTable(), filmy.getEachFilm(databaseUtil), rezyser.getEachRezyser(databaseUtil), nosniki.getEachNosnik(databaseUtil), gatunki.getEachGatunek(databaseUtil), null);
     }
 
-    
     private void onZwrocFilmClicked(ActionEvent e) {
-        
+
         showReturnMovieWindow();
         ((CardLayout) cards.getLayout()).show(cards, RETURN_MOVIE);
     }
-    
+
     private void showReturnMovieWindow() {
         // wypelnianie tabeli z wypozyczonymi filmami:
-        
-        
-        
+        window = windowFactory.getWindow(RETURN_MOVIE);
+        int x = role;
+        role = 2;
+        List<Transakcja> transcations = transakcje.getEachTransakcja(databaseUtil);
+        List<Film> movies = new ArrayList<>();
+        for (Iterator<Transakcja> iter = transcations.listIterator(); iter.hasNext();) {
+            Transakcja transakcja = iter.next();
+            if (transakcja.getIdKlienta() == user && "WYP".equals(transakcja.getTyp())) {
+                movies.add(filmy.getFilm(transakcja.getIdFilmu(), databaseUtil));
+            }
+        }
+
+        role = x;
     }
-    
+
     private void onWylogujClicked(MouseEvent e) {
         // wylogowanie i zmiana widoku na LoginWindow
         windowFactory.getWindow(LOGIN).clear();
@@ -452,13 +462,13 @@ public class MainWindow extends JFrame {
                 }
             }
             if (this.role < 0) {
-                JOptionPane.showMessageDialog(this, "Bląd uwierzytelniania!","Komunikat",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Bląd uwierzytelniania!", "Komunikat", JOptionPane.ERROR_MESSAGE);
             } else {
                 ((CardLayout) cards.getLayout()).show(cards, WELCOME);
                 menuBar.setVisible(true);
             }
         } else {
-            JOptionPane.showMessageDialog(this, "Bląd uwierzytelniania!","Komunikat",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Bląd uwierzytelniania!", "Komunikat", JOptionPane.ERROR_MESSAGE);
         }
 
         ((JPanel) window).revalidate();
@@ -484,10 +494,10 @@ public class MainWindow extends JFrame {
                     Film film = filmy.getFilm(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
                     film.setIlosc(film.getIlosc() - 1);
                     filmy.editFilm(film, databaseUtil);
-                    JOptionPane.showMessageDialog(this, "Zamówiono","Komunikat",JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Zamówiono", "Komunikat", JOptionPane.INFORMATION_MESSAGE);
                 } catch (HibernateException he) {
                     he.printStackTrace();
-                    JOptionPane.showMessageDialog(this, "Problem z zamówieniem!","Komunikat",JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Problem z zamówieniem!", "Komunikat", JOptionPane.ERROR_MESSAGE);
                 } finally {
 
                 }
@@ -505,7 +515,7 @@ public class MainWindow extends JFrame {
             newMovieYear = Short.parseShort(((AddMovieWindow) window).getNewMovieYear().getText());
             newMovieQuant = Long.parseLong(((AddMovieWindow) window).getNewMovieQuantity().getText());
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Wprowadź poprawne dane!","Komunikat",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Wprowadź poprawne dane!", "Komunikat", JOptionPane.ERROR_MESSAGE);
             return;
         }
         JList newMovieGenre = ((AddMovieWindow) window).getGenreList();
@@ -516,7 +526,7 @@ public class MainWindow extends JFrame {
                 || ((AddMovieWindow) window).getCarriers().getSelectedIndex() < 0
                 || ((AddMovieWindow) window).getDirectors().getSelectedIndex() < 0
                 || newMovieGenre.getSelectedIndices().length <= 0) {
-            JOptionPane.showMessageDialog(this, "Wprowadź poprawne dane!","Komunikat",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Wprowadź poprawne dane!", "Komunikat", JOptionPane.ERROR_MESSAGE);
         } else {
 
             Film newFilm = new Film();
@@ -535,12 +545,12 @@ public class MainWindow extends JFrame {
                     gatunkiFilmy.addGatunekFilm(new GatunekFilm(new GatunekFilmId(Integer.parseInt(model.getElementAt(indexes[i]).toString().substring(0, model.getElementAt(indexes[i]).toString().indexOf("."))), newFilm.getIdFilmu())), databaseUtil);
                 }
 
-                JOptionPane.showMessageDialog(this, "Dodano film do bazy","Komunikat",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Dodano film do bazy", "Komunikat", JOptionPane.INFORMATION_MESSAGE);
                 window.clear();
             } catch (HibernateException he) {
                 he.printStackTrace();
 
-                JOptionPane.showMessageDialog(this, "Nie można dodać filmu!","Komunikat",JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Nie można dodać filmu!", "Komunikat", JOptionPane.ERROR_MESSAGE);
 
             }
         }
@@ -548,7 +558,7 @@ public class MainWindow extends JFrame {
 
     public void onUsunFilmButtonClicked() {
         window = windowFactory.getWindow(REMOVE_MOVIE);
-        int abort = 0; 
+        int abort = 0;
         try {
             JTable lista = ((RemoveMovieWindow) window).getTable();
             int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
@@ -570,10 +580,10 @@ public class MainWindow extends JFrame {
             }
 
             filmy.removeFilm(id, databaseUtil);
-            JOptionPane.showMessageDialog(this, "Pomyślnie usunięto film","Komunikat",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Pomyślnie usunięto film", "Komunikat", JOptionPane.INFORMATION_MESSAGE);
         } catch (HibernateException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Nie można usunąć filmu!","Komunikat",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Nie można usunąć filmu!", "Komunikat", JOptionPane.ERROR_MESSAGE);
         }
         showRemoveMovieWindow();
     }
@@ -582,30 +592,30 @@ public class MainWindow extends JFrame {
 
         //Zwroc film
         window = windowFactory.getWindow(RETURN_MOVIE);
-        JTable lista = ((ShowMovieWindow) window).getTable();
+        JTable lista = ((ReturnsMovieWindow) window).getTable();
         if (lista.getSelectedRow() != -1) {
-            if (lista.getValueAt(lista.getSelectedRow(), 4).toString().equalsIgnoreCase("Dostępny")) {
-                try {
-                    Transakcja t = new Transakcja();
-                    t.setIdKlienta(user);
-                    t.setIdFilmu(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()));
-                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-                    Date date = new Date();
-                    t.setDataTransakcji(date);
-                    t.setTyp("ZW");
-                    transakcje.addTransakcja(t, databaseUtil);
-                    Film film = filmy.getFilm(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
-                    film.setIlosc(film.getIlosc() + 1);
-                    filmy.editFilm(film, databaseUtil);
-                    JOptionPane.showMessageDialog(this, "Zwrócono film","Komunikat",JOptionPane.INFORMATION_MESSAGE);
-                } catch (HibernateException he) {
-                    he.printStackTrace();
-                    JOptionPane.showMessageDialog(this, "Błąd zwrotu","Komunikat",JOptionPane.ERROR_MESSAGE);
-                } finally {
 
-                }
+            try {
+                Transakcja t = new Transakcja();
+                t.setIdKlienta(user);
+                t.setIdFilmu(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()));
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                Date date = new Date();
+                t.setDataTransakcji(date);
+                t.setTyp("ZW");
+                transakcje.addTransakcja(t, databaseUtil);
+                Film film = filmy.getFilm(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
+                film.setIlosc(film.getIlosc() + 1);
+                filmy.editFilm(film, databaseUtil);
+                JOptionPane.showMessageDialog(this, "Zwrócono film", "Komunikat", JOptionPane.INFORMATION_MESSAGE);
+            } catch (HibernateException he) {
+                he.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Błąd zwrotu", "Komunikat", JOptionPane.ERROR_MESSAGE);
+            } finally {
+                showReturnMovieWindow();
             }
         }
+
     }
 
     public void onDodajGatunekButtonClicked() {
@@ -625,9 +635,9 @@ public class MainWindow extends JFrame {
             JTable lista = ((RemoveGenreWindow) window).getRemoveGenreTable();
             int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
             gatunki.removeGatunek(id, databaseUtil);
-            JOptionPane.showMessageDialog(this, "Pomyślnie usunięto gatunek!","Komunikat",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Pomyślnie usunięto gatunek!", "Komunikat", JOptionPane.INFORMATION_MESSAGE);
         } catch (HibernateException e) {
-            JOptionPane.showMessageDialog(this, "Nie można usunąć gatunku","Komunikat",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Nie można usunąć gatunku", "Komunikat", JOptionPane.ERROR_MESSAGE);
         }
         showRemoveGenreWindow();
     }
@@ -640,10 +650,10 @@ public class MainWindow extends JFrame {
             if (lista.getValueAt(lista.getSelectedRow(), 3).toString().equalsIgnoreCase("Wypożyczenie")) {
                 try {
                     transakcje.removeTransakcja(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
-                    JOptionPane.showMessageDialog(this, "Usunięto","Komunikat",JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Usunięto", "Komunikat", JOptionPane.INFORMATION_MESSAGE);
                 } catch (HibernateException he) {
                     he.printStackTrace();
-                    JOptionPane.showMessageDialog(this, "Błąd, nie usunięto!","Komunikat",JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Błąd, nie usunięto!", "Komunikat", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
@@ -661,10 +671,10 @@ public class MainWindow extends JFrame {
                     Transakcja transakcja = transakcje.getTransakcja(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
                     transakcja.setIdPracownika(user);
                     transakcje.editTransakcja(transakcja, databaseUtil);
-                    JOptionPane.showMessageDialog(this, "Zatwierdzono","Komunikat",JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Zatwierdzono", "Komunikat", JOptionPane.INFORMATION_MESSAGE);
                 } catch (HibernateException he) {
                     he.printStackTrace();
-                    JOptionPane.showMessageDialog(this, "Błąd!","Komunikat",JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "Błąd!", "Komunikat", JOptionPane.ERROR_MESSAGE);
                 }
             }
             showTransactionWindow();
