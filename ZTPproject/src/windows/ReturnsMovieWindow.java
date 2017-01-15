@@ -25,8 +25,8 @@ public class ReturnsMovieWindow extends JPanel implements CustomWindowInterface 
         returnsMovieButton = new JButton("Zwróć");
         returnsmoviesTable = new javax.swing.JTable();
         returnsmoviesTable.setAutoCreateRowSorter(true);
-        returnsMovieError = new JLabel();
-        returnsMovieSuccess = new JLabel();
+        returnsMovieError = new JLabel("Błąd zwrotu");
+        returnsMovieSuccess = new JLabel("Zwrócono");
         this.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.WEST;
