@@ -1,10 +1,12 @@
 package windows;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -12,6 +14,8 @@ import javax.swing.JTable;
 public class ReturnsMovieWindow extends JPanel implements CustomWindowInterface {
 
     private JTable returnsmoviesTable;
+    private JLabel returnsMovieError;
+    private JLabel returnsMovieSucces;
     private JScrollPane scrollPane;
     private JButton returnsMovieButton;
     private static ReturnsMovieWindow instance;
@@ -33,12 +37,29 @@ public class ReturnsMovieWindow extends JPanel implements CustomWindowInterface 
         this.add(scrollPane, constraints);
         scrollPane.setViewportView(returnsmoviesTable);
 
+        //ERROR LABEL
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.anchor = GridBagConstraints.LAST_LINE_START;
+        this.add(returnsMovieError, constraints);
+        returnsMovieError.setVisible(true);
+        returnsMovieError.setForeground(new Color(255, 0, 51));
+        
+        
         //BUTTON
         constraints.gridy = 1;
         constraints.gridx = 1;
         constraints.anchor = GridBagConstraints.PAGE_END;
         this.add(returnsMovieButton, constraints);
 
+        //SUCCESS LABEL
+        constraints.gridx = 2;
+        constraints.anchor = GridBagConstraints.LAST_LINE_END;
+        this.add(returnsMovieSucces, constraints);
+        returnsMovieSucces.setVisible(true);
+        returnsMovieSucces.setForeground(new Color(0, 204, 0));
+        
+        
         // BORDER
         this.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(), "Zamówione pozycje"));
@@ -51,13 +72,21 @@ public class ReturnsMovieWindow extends JPanel implements CustomWindowInterface 
         return instance;
     }
 
-    public JTable getTable()
-    {
+    public JTable getTable() {
         return returnsmoviesTable;
     }
-    
-    
+        
     public JButton getReturnsMovieButton() {
         return returnsMovieButton;
     }
+
+    public JLabel getReturnsMovieError() {
+        return returnsMovieError;
+    }
+
+    public JLabel getReturnsMovieSucces() {
+        return returnsMovieSucces;
+    }
+    
+    
 }
