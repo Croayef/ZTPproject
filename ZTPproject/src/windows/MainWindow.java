@@ -3,7 +3,6 @@ package windows;
 import POJO.Film;
 import POJO.Nosnik;
 import POJO.Gatunek;
-import POJO.GatunekFilm;
 import POJO.GatunekFilmId;
 import POJO.Klient;
 import POJO.Pracownik;
@@ -11,7 +10,6 @@ import POJO.Rezyser;
 import POJO.Transakcja;
 import POJO.GatunekFilm;
 import Proxy.FilmProxy;
-import Proxy.GatunekFilmProxy;
 import Proxy.GatunekProxy;
 import Proxy.GatunekFilmProxy;
 import Proxy.KlientProxy;
@@ -31,7 +29,6 @@ import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -548,12 +545,13 @@ public class MainWindow extends JFrame {
             {
                 if(gf.getId().getIdFilmu() == id)
                 {
-                    gatunkiFilmy.removeGatunekFilm(id, databaseUtil);
+                    gatunkiFilmy.removeGatunekFilm(gf.getId(), databaseUtil);
                 }
             }
             filmy.removeFilm(id, databaseUtil);
             ((RemoveMovieWindow) window).getRemoveMovieSuccess().setVisible(true);
         } catch (HibernateException e) {
+            e.printStackTrace();
             ((RemoveMovieWindow) window).getRemoveMovieError().setVisible(true);
         }
         showRemoveMovieWindow();

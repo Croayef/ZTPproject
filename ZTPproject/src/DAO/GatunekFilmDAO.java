@@ -2,6 +2,7 @@ package DAO;
 
 import DAOInterfaces.GatunekFilmDAOInterface;
 import POJO.GatunekFilm;
+import POJO.GatunekFilmId;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -20,7 +21,7 @@ public class GatunekFilmDAO implements GatunekFilmDAOInterface{
     }
 
     
-    public void removeGatunekFilm(int id, SessionFactory sessionFactory) {
+    public void removeGatunekFilm(GatunekFilmId id, SessionFactory sessionFactory) {
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
         GatunekFilm gatunekFilm = (GatunekFilm) session.get(GatunekFilm.class, id);

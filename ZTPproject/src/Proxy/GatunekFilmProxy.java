@@ -3,6 +3,7 @@ package Proxy;
 import DAO.GatunekFilmDAO;
 import DAOInterfaces.GatunekFilmDAOInterface;
 import POJO.GatunekFilm;
+import POJO.GatunekFilmId;
 import java.util.List;
 import org.hibernate.SessionFactory;
 
@@ -18,7 +19,7 @@ public class GatunekFilmProxy implements GatunekFilmDAOInterface {
         this.gatunekFilm.addGatunekFilm(gatunekFilm, sessionFactory);
     }
 
-    public void removeGatunekFilm(int id, SessionFactory sessionFactory) {
+    public void removeGatunekFilm(GatunekFilmId id, SessionFactory sessionFactory) {
         this.gatunekFilm.removeGatunekFilm(id, sessionFactory);
     }
 
