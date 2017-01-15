@@ -21,7 +21,6 @@ public class AddMovieWindow extends JPanel implements CustomWindowInterface {
     private JLabel carrierLabel;
     private JLabel directorLabel;
     private JLabel genresLabel;
-    private JLabel outcomeLabel;
     private JTextField newMovieName;
     private JTextField newMovieYear;
     private JTextField newMovieQuantity;
@@ -50,8 +49,6 @@ public class AddMovieWindow extends JPanel implements CustomWindowInterface {
         genreList.setBounds(0, 0, 300, 300);
         genreListScrollPane = new JScrollPane(genreList);
         addMovieButton = new JButton("Dodaj Film");
-        outcomeLabel = new JLabel("Outcome!");
-        outcomeLabel.setVisible(false);
         setComponensPositions();
 
     }
@@ -117,12 +114,6 @@ public class AddMovieWindow extends JPanel implements CustomWindowInterface {
         constraints.anchor = GridBagConstraints.WEST;
         constraints.fill = GridBagConstraints.NONE;
         this.add(addMovieButton, constraints);
-        constraints.gridx = 0;
-        constraints.gridy = 5;
-        constraints.gridwidth = 5;
-        constraints.gridheight = 0;
-        constraints.anchor = GridBagConstraints.CENTER;
-        this.add(outcomeLabel, constraints);
     }
 
     public static AddMovieWindow getInstance() {
@@ -159,11 +150,7 @@ public class AddMovieWindow extends JPanel implements CustomWindowInterface {
     public JTextField getNewMovieQuantity() {
         return newMovieQuantity;
     }
-    
-    public JLabel getOutcomeLabel() {
-        return outcomeLabel;
-    }
-    
+
     public void clear() {
         this.newMovieName.setText("");
         this.newMovieYear.setText("");

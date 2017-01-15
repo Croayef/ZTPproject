@@ -13,7 +13,6 @@ public class AddGenreWindow extends JPanel implements CustomWindowInterface {
 
     private static AddGenreWindow instance;
     private JLabel nameLabel;
-    private JLabel outcomeLabel;
     private JTextField newGenreName;
     private JButton addGenreButton;
 
@@ -24,7 +23,6 @@ public class AddGenreWindow extends JPanel implements CustomWindowInterface {
         nameLabel = new JLabel("Nazwa: ");
         newGenreName = new JTextField(20);
         addGenreButton = new JButton("Dodaj");
-        outcomeLabel = new JLabel();
 
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.WEST;
@@ -39,10 +37,6 @@ public class AddGenreWindow extends JPanel implements CustomWindowInterface {
         constraints.gridwidth = 2;
         constraints.anchor = GridBagConstraints.LAST_LINE_END;
         this.add(addGenreButton, constraints);
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        constraints.anchor = GridBagConstraints.LAST_LINE_START;
-        this.add(outcomeLabel, constraints);
 
     }
 
@@ -61,10 +55,6 @@ public class AddGenreWindow extends JPanel implements CustomWindowInterface {
         return this.newGenreName;
     }
 
-    public JLabel getOutcomeLabel() {
-        return outcomeLabel;
-    }
-    
     public void clear() {
         this.nameLabel.setText("");
     }

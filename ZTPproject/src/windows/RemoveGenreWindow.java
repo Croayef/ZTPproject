@@ -13,13 +13,11 @@ import javax.swing.JTable;
 public class RemoveGenreWindow extends JPanel implements CustomWindowInterface {
 
     private static RemoveGenreWindow instance;
-    private JLabel removegenreLabel;
     private JButton removegenreButton;
     private JScrollPane scrollPane;
     private JTable removegenreTable;
 
     private RemoveGenreWindow() {
-        removegenreLabel = new JLabel();
         removegenreButton = new JButton("Usuń");
         scrollPane = new JScrollPane();
         removegenreTable = new JTable();
@@ -41,11 +39,6 @@ public class RemoveGenreWindow extends JPanel implements CustomWindowInterface {
         constraints.anchor = GridBagConstraints.PAGE_START;
         this.add(removegenreButton, constraints);
 
-        //ERROR LABEL
-        constraints.gridy = 2;
-        constraints.anchor = GridBagConstraints.PAGE_END;
-        this.add(removegenreLabel, constraints);
-        removegenreLabel.setVisible(false);
 
         // BORDER
         this.setBorder(BorderFactory.createTitledBorder(
@@ -58,10 +51,6 @@ public class RemoveGenreWindow extends JPanel implements CustomWindowInterface {
             instance = new RemoveGenreWindow();
         }
         return instance;
-    }
-
-    public JLabel getRemoveGenreLabel() {
-        return removegenreLabel;
     }
 
     public JTable getRemoveGenreTable() {

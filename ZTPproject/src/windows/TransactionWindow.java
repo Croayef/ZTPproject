@@ -15,7 +15,6 @@ public class TransactionWindow extends JPanel implements CustomWindowInterface {
     private static TransactionWindow instance;
     private JScrollPane transactionScrollPane;
     private JTable transactions;
-    private JLabel outcomeLabel;
     private JButton approveTransactionButton;
     private JButton rejectTransactionButton;
 
@@ -25,7 +24,6 @@ public class TransactionWindow extends JPanel implements CustomWindowInterface {
 
         approveTransactionButton = new JButton("Zatwierdź Transakcję");
         rejectTransactionButton = new JButton("Odrzuć Transakcję");
-        outcomeLabel = new JLabel("OUTCOME");
         transactions = new JTable();
         transactionScrollPane = new JScrollPane(transactions);
 
@@ -51,12 +49,6 @@ public class TransactionWindow extends JPanel implements CustomWindowInterface {
         constraints.gridx = 2;
         constraints.anchor = GridBagConstraints.LAST_LINE_END;
         this.add(rejectTransactionButton, constraints);
-        constraints.gridx = 1;
-        constraints.gridy = 2;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.anchor = GridBagConstraints.CENTER;
-        this.add(outcomeLabel, constraints);
-
     }
 
     public static TransactionWindow getInstance() {
@@ -74,13 +66,8 @@ public class TransactionWindow extends JPanel implements CustomWindowInterface {
         return this.rejectTransactionButton;
     }
 
-    @Override
     public JTable getTable() {
         return this.transactions;
-    }
-    
-    public JLabel getOutcomeLabel(){
-        return this.outcomeLabel;
     }
     
     public void clear() {

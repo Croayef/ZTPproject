@@ -122,7 +122,6 @@ public class MainWindow extends JFrame {
         transakcje.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
                 onTransakcjeClicked(evt);
-                ((TransactionWindow) windowFactory.getWindow(TRANSACTION)).getOutcomeLabel().setVisible(false);
             }
         });
 
@@ -132,15 +131,12 @@ public class MainWindow extends JFrame {
         admFilmDodaj.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onDodajFilmClicked(e);
-                ((AddMovieWindow) windowFactory.getWindow(ADD_MOVIE)).getOutcomeLabel().setVisible(false);
             }
         });
         JMenuItem admFilmUsun = new JMenuItem("Usuń Film");
         admFilmUsun.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onUsunFilmClicked(e);
-                ((RemoveMovieWindow) windowFactory.getWindow(REMOVE_MOVIE)).getRemoveMovieError().setVisible(false);
-                ((RemoveMovieWindow) windowFactory.getWindow(REMOVE_MOVIE)).getRemoveMovieSuccess().setVisible(false);
             }
         });
         admFilm.add(admFilmDodaj);
@@ -152,14 +148,13 @@ public class MainWindow extends JFrame {
         admGatunekDodaj.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 onDodajGatunekClicked(evt);
-                ((AddGenreWindow) windowFactory.getWindow(ADD_GENRE)).getOutcomeLabel().setVisible(false);
+                ((AddGenreWindow) windowFactory.getWindow(ADD_GENRE)).clear();
             }
         });
         JMenuItem admGatunekUsun = new JMenuItem("Usuń Gatunek");
         admGatunekUsun.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 onUsunGatunekClicked(evt);
-                ((RemoveGenreWindow) windowFactory.getWindow(REMOVE_GENRE)).getRemoveGenreLabel().setVisible(false);
             }
         });
         admGatunek.add(admGatunekDodaj);
@@ -170,8 +165,6 @@ public class MainWindow extends JFrame {
         bazaFilmow.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
                 onBazaFilmowClicked(evt);
-                ((ShowMovieWindow) windowFactory.getWindow(SHOW_MOVIE)).getShowMovieSucces().setVisible(false);
-                ((ShowMovieWindow) windowFactory.getWindow(SHOW_MOVIE)).getShowMovieeError().setVisible(false);
             }
         });
 
@@ -199,8 +192,6 @@ public class MainWindow extends JFrame {
     public void showTransactionWindow() {
         window = windowFactory.getWindow(TRANSACTION);
         // wypelnienie listy transakcji
-        ((TransactionWindow) window).getOutcomeLabel().setVisible(false);
-
         JTable transactions = window.getTable();
         Vector<String> tableHeaders = new Vector<>();
         Vector tableData = new Vector<>();
@@ -411,7 +402,6 @@ public class MainWindow extends JFrame {
         window = windowFactory.getWindow(LOGIN);
         String pass = new String(((LoginWindow) window).getPasswordField().getPassword());
         String login = ((LoginWindow) window).getLoginField().getText();
-        ((LoginWindow) window).getErrorField().setVisible(false);
         if (!login.trim().equals("") && pass.length() > 0) {
 
             for (Klient k : klienci.getEachKlient(databaseUtil)) {
@@ -435,7 +425,6 @@ public class MainWindow extends JFrame {
                 }
             }
             if (this.role < 0) {
-                ((LoginWindow) window).getErrorField().setVisible(true);
                 JOptionPane.showMessageDialog(this, "Bląd uwierzytelniania!");
             } else {
                 ((CardLayout) cards.getLayout()).show(cards, WELCOME);
@@ -452,8 +441,6 @@ public class MainWindow extends JFrame {
         System.out.println("windows.MainWindow.onZamowButtonClicked()");
         //Zamow film
         window = windowFactory.getWindow(SHOW_MOVIE);
-        JLabel labelSucces = ((ShowMovieWindow) window).getShowMovieSucces();
-        JLabel labelError = ((ShowMovieWindow) window).getShowMovieeError();
         JTable lista = ((ShowMovieWindow) window).getTable();
 
         if (lista.getSelectedRow() != -1) {
@@ -528,21 +515,13 @@ public class MainWindow extends JFrame {
 
                 JOptionPane.showMessageDialog(this, "Nie można dodać filmu!");
 
-            } finally {
-                newFilm = null;
-                ((AddMovieWindow) window).getOutcomeLabel().setVisible(true);
             }
-
         }
-
     }
 
     public void onUsunFilmButtonClicked() {
         window = windowFactory.getWindow(REMOVE_MOVIE);
-        ((RemoveMovieWindow) window).getRemoveMovieSuccess().setVisible(false);
-        ((RemoveMovieWindow) window).getRemoveMovieError().setVisible(false);
-        int abort = 0;
-        
+        int abort = 0; 
         try {
             JTable lista = ((RemoveMovieWindow) window).getTable();
             int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
@@ -614,10 +593,7 @@ public class MainWindow extends JFrame {
     }
 
     public void onUsunGatunekButtonClicked() {
-
         window = windowFactory.getWindow(REMOVE_GENRE);
-        JLabel out = ((RemoveGenreWindow) window).getRemoveGenreLabel();
-
         try {
             JTable lista = ((RemoveGenreWindow) window).getRemoveGenreTable();
             int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
@@ -626,15 +602,12 @@ public class MainWindow extends JFrame {
         } catch (HibernateException e) {
             JOptionPane.showMessageDialog(this, "Nie można usunąć gatunku");
         }
-        ((RemoveGenreWindow) window).getRemoveGenreLabel().setVisible(true);
         showRemoveGenreWindow();
     }
 
     public void onOdrzucTransakcjeButtonClicked() {
-
         //Odrzuc Transakcje
         window = windowFactory.getWindow(TRANSACTION);
-        JLabel label = ((TransactionWindow) window).getOutcomeLabel();
         JTable lista = ((TransactionWindow) window).getTable();
         if (lista.getSelectedRow() != -1) {
             if (lista.getValueAt(lista.getSelectedRow(), 3).toString().equalsIgnoreCase("Wypożyczenie")) {
@@ -644,8 +617,6 @@ public class MainWindow extends JFrame {
                 } catch (HibernateException he) {
                     he.printStackTrace();
                     JOptionPane.showMessageDialog(this, "Błąd, nie usunięto!");
-                } finally {
-                    label.setVisible(true);
                 }
             }
         }
@@ -656,7 +627,6 @@ public class MainWindow extends JFrame {
 
         //Zatwierdz Transakcje
         window = windowFactory.getWindow(TRANSACTION);
-        JLabel label = ((TransactionWindow) window).getOutcomeLabel();
         JTable lista = ((TransactionWindow) window).getTable();
         if (lista.getSelectedRow() != -1) {
             if (lista.getValueAt(lista.getSelectedRow(), 3).toString().equalsIgnoreCase("Wypożyczenie")) {

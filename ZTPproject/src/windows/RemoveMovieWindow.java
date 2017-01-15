@@ -14,16 +14,11 @@ import javax.swing.JTable;
 public class RemoveMovieWindow extends JPanel implements CustomWindowInterface {
 
     private static RemoveMovieWindow instance;
-    private JLabel removemovieError;
-    private JLabel removemovieSuccess;
     private JButton removemovieButton;
     private JScrollPane scrollPane;
     private JTable removemovieTable;
 
     private RemoveMovieWindow() {
-
-        removemovieError = new JLabel("Nie można usunąć filmu!");
-        removemovieSuccess = new JLabel("Pomyślnie usunięto film!");
         removemovieButton = new JButton("Usuń film");
         scrollPane = new JScrollPane();
         removemovieTable = new JTable();
@@ -38,26 +33,12 @@ public class RemoveMovieWindow extends JPanel implements CustomWindowInterface {
         constraints.gridy = 0;
         this.add(scrollPane, constraints);
         scrollPane.setViewportView(removemovieTable);
-
-        //ERROR LABEL
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.anchor = GridBagConstraints.LAST_LINE_START;
-        this.add(removemovieError, constraints);
-        removemovieError.setVisible(true);
-        removemovieError.setForeground(new Color(255, 0, 51));
-
+        
         //BUTTON
+        constraints.gridy = 1;
         constraints.gridx = 1;
         constraints.anchor = GridBagConstraints.PAGE_END;
         this.add(removemovieButton, constraints);
-
-        //SUCCESS LABEL
-        constraints.gridx = 2;
-        constraints.anchor = GridBagConstraints.LAST_LINE_END;
-        this.add(removemovieSuccess, constraints);
-        removemovieSuccess.setVisible(true);
-        removemovieSuccess.setForeground(new Color(0, 204, 0));
 
         // BORDER
         this.setBorder(BorderFactory.createTitledBorder(
@@ -72,14 +53,6 @@ public class RemoveMovieWindow extends JPanel implements CustomWindowInterface {
         return instance;
     }
 
-    public JLabel getRemoveMovieError() {
-        return removemovieError;
-    }
-
-    public JLabel getRemoveMovieSuccess() {
-        return removemovieSuccess;
-    }
-
     public JButton getRemoveMovieButton() {
         return removemovieButton;
     }
@@ -87,9 +60,9 @@ public class RemoveMovieWindow extends JPanel implements CustomWindowInterface {
     public JTable getTable() {
         return removemovieTable;
     }
-    
+
     public void clear() {
-        
+
     }
-    
+
 }

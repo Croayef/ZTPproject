@@ -21,7 +21,6 @@ public class LoginWindow extends JPanel implements CustomWindowInterface {
     private JTextField logField;
     private Label loginLabel;
     private Label passLabel;
-    private JLabel errorField;
 
     private LoginWindow() {
 
@@ -30,7 +29,6 @@ public class LoginWindow extends JPanel implements CustomWindowInterface {
         loginButton = new JButton("Login");//
         logField = new JTextField(20);//
         passLabel = new Label("Hasło:");//
-        errorField = new JLabel("Bląd uwierzytelniania");
 
         this.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
@@ -55,14 +53,6 @@ public class LoginWindow extends JPanel implements CustomWindowInterface {
         constraints.gridx = 1;
         this.add(passField, constraints);
 
-        // ERROR LABEL
-        constraints.gridx = 1;
-        constraints.gridy = 3;
-        constraints.anchor = GridBagConstraints.LAST_LINE_END;
-        this.add(errorField, constraints);
-        errorField.setVisible(true);
-        errorField.setForeground(new Color(255, 0, 51));
-
         // LOGIN BUTTON
         constraints.gridx = 0;
         constraints.gridy = 2;
@@ -76,10 +66,6 @@ public class LoginWindow extends JPanel implements CustomWindowInterface {
         
         clear();
         
-    }
-
-    public JLabel getErrorField() {
-        return errorField;
     }
 
     public static LoginWindow getInstance() {
@@ -104,7 +90,6 @@ public class LoginWindow extends JPanel implements CustomWindowInterface {
     public void clear() {
         this.logField.setText("");
         this.passField.setText("");
-        this.errorField.setVisible(false);
     }
     
 }

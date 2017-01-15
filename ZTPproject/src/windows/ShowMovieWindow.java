@@ -14,8 +14,6 @@ import javax.swing.JTable;
 public class ShowMovieWindow extends JPanel implements CustomWindowInterface {
 
     private JTable moviesTable;
-    private JLabel showMovieError;
-    private JLabel showMovieSucces;
     private JScrollPane scrollPane;
     private JButton showMovieButton;
     private static ShowMovieWindow instance;
@@ -24,8 +22,6 @@ public class ShowMovieWindow extends JPanel implements CustomWindowInterface {
 
         scrollPane = new JScrollPane();
         showMovieButton = new JButton("Zamów film");
-        showMovieError = new JLabel();
-        showMovieSucces = new JLabel();
         moviesTable = new javax.swing.JTable();
         moviesTable.setAutoCreateRowSorter(true);
         this.setLayout(new GridBagLayout());
@@ -38,27 +34,12 @@ public class ShowMovieWindow extends JPanel implements CustomWindowInterface {
         constraints.gridy = 0;
         this.add(scrollPane, constraints);
         scrollPane.setViewportView(moviesTable);
-        
-        //ERROR LABEL
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.anchor = GridBagConstraints.LAST_LINE_START;
-        this.add(showMovieError, constraints);
-        showMovieError.setVisible(true);
-        showMovieError.setForeground(new Color(255, 0, 51));
 
         //BUTTON
         constraints.gridy = 1;
         constraints.gridx = 1;
         constraints.anchor = GridBagConstraints.PAGE_END;
         this.add(showMovieButton, constraints);
-        
-        //SUCCESS LABEL
-        constraints.gridx = 2;
-        constraints.anchor = GridBagConstraints.LAST_LINE_END;
-        this.add(showMovieSucces, constraints);
-        showMovieSucces.setVisible(true);
-        showMovieSucces.setForeground(new Color(0, 204, 0));
 
         // BORDER
         this.setBorder(BorderFactory.createTitledBorder(
@@ -81,14 +62,6 @@ public class ShowMovieWindow extends JPanel implements CustomWindowInterface {
         return showMovieButton;
     }
 
-    public JLabel getShowMovieeError() {
-        return showMovieError;
-    }
-
-    public JLabel getShowMovieSucces() {
-        return showMovieSucces;
-    }
-    
     public void clear() {
         
     }
