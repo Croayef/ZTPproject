@@ -441,7 +441,7 @@ public class MainWindow extends JFrame {
     }
 
     public void onZamowButtonClicked() {
-
+        System.out.println("windows.MainWindow.onZamowButtonClicked()");
         //Zamow film
         window = windowFactory.getWindow(SHOW_MOVIE);
          JLabel labelSucces = ((ShowMovieWindow) window).getShowMovieSucces();

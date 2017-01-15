@@ -14,10 +14,13 @@ public class TransakcjaDAO implements TransakcjaDAOInterface {
 
     public void addTransakcja(Transakcja transakcja, SessionFactory sessionFactory) {
         session = sessionFactory.openSession();
+        System.out.println("DAO.TransakcjaDAO.addTransakcja()");
         transaction = session.beginTransaction();
         session.save(transakcja);
+        System.out.println("DAO.TransakcjaDAO.addTransakcja()2");
         transaction.commit();
         session.close();
+        System.out.println("DAO.TransakcjaDAO.addTransakcja()3");
     }
 
     public void removeTransakcja(int id, SessionFactory sessionFactory) {

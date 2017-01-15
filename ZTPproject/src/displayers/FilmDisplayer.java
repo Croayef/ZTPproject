@@ -19,6 +19,7 @@ public abstract class FilmDisplayer {
                 return false;
             }
         });
+        movieTable.removeColumn(movieTable.getColumnModel().getColumn(0));
 
     }
 
