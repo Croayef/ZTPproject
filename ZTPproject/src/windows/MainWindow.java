@@ -1,12 +1,16 @@
 package windows;
 
+import POJO.Film;
 import POJO.Nosnik;
 import POJO.Gatunek;
+import POJO.GatunekFilm;
+import POJO.GatunekFilmId;
 import POJO.Klient;
 import POJO.Pracownik;
 import POJO.Rezyser;
 import POJO.Transakcja;
 import Proxy.FilmProxy;
+import Proxy.GatunekFilmProxy;
 import Proxy.GatunekProxy;
 import Proxy.KlientProxy;
 import Proxy.NosnikProxy;
@@ -22,6 +26,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -36,6 +42,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTable;
+import javax.swing.ListModel;
 import javax.swing.table.DefaultTableModel;
 import org.hibernate.HibernateException;
 
@@ -60,6 +67,7 @@ public class MainWindow extends JFrame {
     private FilmDisplayer movieDisplayer;
     private NosnikProxy nosniki;
     private GatunekProxy gatunki;
+    private GatunekFilmProxy gatunkiFilmy;
     private TransakcjaProxy transakcje;
     private KlientProxy klienci;
     private PracownikProxy pracownicy;
@@ -78,6 +86,7 @@ public class MainWindow extends JFrame {
         this.klienci = new KlientProxy();
         this.pracownicy = new PracownikProxy();
         this.windowFactory = new WindowFactory();
+        this.gatunkiFilmy = new GatunekFilmProxy();
         prepareMenuBar();
         prepareComponents();
     }
@@ -104,6 +113,7 @@ public class MainWindow extends JFrame {
         transakcje.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
                 onTransakcjeClicked(evt);
+                ((TransactionWindow)windowFactory.getWindow(TRANSACTION)).getOutcomeLabel().setVisible(false);
             }
         });
 
@@ -113,12 +123,15 @@ public class MainWindow extends JFrame {
         admFilmDodaj.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onDodajFilmClicked(e);
+                ((AddMovieWindow)windowFactory.getWindow(ADD_MOVIE)).getOutcomeLabel().setVisible(false);
             }
         });
         JMenuItem admFilmUsun = new JMenuItem("Usuń Film");
         admFilmUsun.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onUsunFilmClicked(e);
+                ((RemoveMovieWindow)windowFactory.getWindow(REMOVE_MOVIE)).getRemoveMovieError().setVisible(false);
+                ((RemoveMovieWindow)windowFactory.getWindow(REMOVE_MOVIE)).getRemoveMovieSuccess().setVisible(false);
             }
         });
         admFilm.add(admFilmDodaj);
@@ -130,12 +143,14 @@ public class MainWindow extends JFrame {
         admGatunekDodaj.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 onDodajGatunekClicked(evt);
+                ((AddGenreWindow)windowFactory.getWindow(ADD_GENRE)).getOutcomeLabel().setVisible(false);
             }
         });
         JMenuItem admGatunekUsun = new JMenuItem("Usuń Gatunek");
         admGatunekUsun.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 onUsunGatunekClicked(evt);
+                ((RemoveGenreWindow)windowFactory.getWindow(REMOVE_GENRE)).getRemoveGenreLabel().setVisible(false);
             }
         });
         admGatunek.add(admGatunekDodaj);
@@ -146,6 +161,8 @@ public class MainWindow extends JFrame {
         bazaFilmow.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
                 onBazaFilmowClicked(evt);
+                ((ShowMovieWindow)windowFactory.getWindow(SHOW_MOVIE)).getShowMovieSucces().setVisible(false);
+                ((ShowMovieWindow)windowFactory.getWindow(SHOW_MOVIE)).getShowMovieeError().setVisible(false);
             }
         });
 
@@ -412,8 +429,8 @@ public class MainWindow extends JFrame {
         } else {
             ((LoginWindow) window).getErrorField().setVisible(true);
         }
-       
-        ((JPanel)window).revalidate();
+
+        ((JPanel) window).revalidate();
     }
 
     public void onZamowButtonClicked() {
@@ -423,7 +440,64 @@ public class MainWindow extends JFrame {
 
     public void onDodajFilmButtonClicked() {
 
-        //Dodaj film
+        window = windowFactory.getWindow(ADD_MOVIE);
+        String newMovieTitle = ((AddMovieWindow) window).getNewMovieName().getText();
+        Short newMovieYear;
+        Long newMovieQuant;
+        try {
+            newMovieYear = Short.parseShort(((AddMovieWindow) window).getNewMovieYear().getText());
+            newMovieQuant = Long.parseLong(((AddMovieWindow) window).getNewMovieQuantity().getText());
+        } catch (Exception e) {
+            ((AddMovieWindow) window).getOutcomeLabel().setText("Wprowadź poprawne dane!");
+            ((AddMovieWindow) window).getOutcomeLabel().setForeground(Color.red);
+            ((AddMovieWindow) window).getOutcomeLabel().setVisible(true);
+            return;
+        }
+        JList newMovieGenre = ((AddMovieWindow) window).getGenreList();
+        if (newMovieTitle.trim().equals("")
+                || newMovieYear < 1895
+                || newMovieYear > LocalDateTime.now().getYear()
+                || newMovieQuant < 0
+                || ((AddMovieWindow) window).getCarriers().getSelectedIndex() < 0
+                || ((AddMovieWindow) window).getDirectors().getSelectedIndex() < 0
+                || newMovieGenre.getSelectedIndices().length <= 0) {
+            ((AddMovieWindow) window).getOutcomeLabel().setText("Wprowadź poprawne dane!");
+            ((AddMovieWindow) window).getOutcomeLabel().setForeground(Color.red);
+            ((AddMovieWindow) window).getOutcomeLabel().setVisible(true);
+        } else {
+
+            Film newFilm = new Film();
+
+            newFilm.setTytul(newMovieTitle);
+            newFilm.setRokProdukcji(newMovieYear);
+            newFilm.setIlosc(newMovieQuant);
+            newFilm.setIdRezysera(((AddMovieWindow) window).getDirectors().getSelectedIndex() + 1);
+            newFilm.setIdNosnika(((AddMovieWindow) window).getCarriers().getSelectedIndex() + 1);
+            try {
+                filmy.addFilm(newFilm, databaseUtil);
+                ListModel model = newMovieGenre.getModel();
+                int[] indexes = newMovieGenre.getSelectedIndices();
+                GatunekFilm[] gatFilm = new GatunekFilm[newMovieGenre.getSelectedIndices().length];
+                for (int i = 0; i < gatFilm.length; i++) {
+                    gatunkiFilmy.addGatunekFilm(new GatunekFilm(new GatunekFilmId(Integer.parseInt(model.getElementAt(indexes[i]).toString().substring(0, model.getElementAt(indexes[i]).toString().indexOf("."))), newFilm.getIdFilmu())), databaseUtil);
+                }
+
+                ((AddMovieWindow) window).getOutcomeLabel().setText("Dodano film do bazy");
+                ((AddMovieWindow) window).getOutcomeLabel().setForeground(Color.green);
+                window.clear();
+            } catch (HibernateException he) {
+                he.printStackTrace();
+
+                ((AddMovieWindow) window).getOutcomeLabel().setText("Nie można dodać filmu!");
+                ((AddMovieWindow) window).getOutcomeLabel().setForeground(Color.red);
+
+            } finally {
+                newFilm = null;
+                ((AddMovieWindow) window).getOutcomeLabel().setVisible(true);
+            }
+
+        }
+
     }
 
     public void onUsunFilmButtonClicked() {
@@ -501,8 +575,8 @@ public class MainWindow extends JFrame {
     public static void main(String[] args) {
         MainWindow mainWindow = new MainWindow();
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainWindow.setSize(800, 800);
-        mainWindow.setResizable(false);
+        mainWindow.setSize(1024, 728);
+        mainWindow.setResizable(true);
         mainWindow.pack();
         mainWindow.setVisible(true);
     }

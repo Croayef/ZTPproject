@@ -147,11 +147,29 @@ public class AddMovieWindow extends JPanel implements CustomWindowInterface {
     public JButton getAddMovieButton() {
         return this.addMovieButton;
     }
+
+    public JTextField getNewMovieName() {
+        return newMovieName;
+    }
+
+    public JTextField getNewMovieYear() {
+        return newMovieYear;
+    }
+
+    public JTextField getNewMovieQuantity() {
+        return newMovieQuantity;
+    }
+    
+    public JLabel getOutcomeLabel() {
+        return outcomeLabel;
+    }
     
     public void clear() {
         this.newMovieName.setText("");
         this.newMovieYear.setText("");
         this.newMovieQuantity.setText("");
+        this.newMovieCarrier.setSelectedIndex(-1);
+        this.newMovieDirector.setSelectedIndex(-1);
     }
     
 }
