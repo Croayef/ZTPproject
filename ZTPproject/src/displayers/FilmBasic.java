@@ -2,7 +2,7 @@ package displayers;
 
 import POJO.Film;
 import POJO.Gatunek;
-import POJO.GatunekFilmId;
+import POJO.GatunekFilm;
 import POJO.Nosnik;
 import POJO.Rezyser;
 import java.util.List;
@@ -21,7 +21,7 @@ public class FilmBasic extends FilmDisplayer {
         return tableHeaders;
     }
 
-    protected Vector showData(List<Film> movies, List<Rezyser> directors, List<Nosnik> carriers, List<Gatunek> genres, List<GatunekFilmId> movieGenres) {
+    protected Vector showData(List<Film> movies, List<Rezyser> directors, List<Nosnik> carriers, List<Gatunek> genres, List<GatunekFilm> movieGenres) {
         Vector tableData = new Vector();
         if (!movies.isEmpty()) {
             for (Film o : movies) {
