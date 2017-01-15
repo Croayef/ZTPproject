@@ -182,7 +182,7 @@ public class MainWindow extends JFrame {
         card2.add(new JTextField("TextField", 20));
         cards = new JPanel(new CardLayout());
         cards.add(card1, FIRSTCARD);
-        cards.add((JPanel) window, SECONDCARD);
+        cards.add((JPanel)windowFactory.getWindow("SHOW_MOVIE"), SECONDCARD);
 
         this.add(mainPane, BorderLayout.PAGE_START);
         this.add(cards, BorderLayout.CENTER);
