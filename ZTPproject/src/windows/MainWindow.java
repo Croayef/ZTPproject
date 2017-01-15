@@ -501,8 +501,18 @@ public class MainWindow extends JFrame {
     }
 
     public void onUsunFilmButtonClicked() {
-
-        //Usun film
+        window = windowFactory.getWindow(REMOVE_MOVIE);
+        ((RemoveMovieWindow) window).getRemoveMovieSuccess().setVisible(false);
+        ((RemoveMovieWindow) window).getRemoveMovieError().setVisible(false);
+        try{
+            JTable lista = ((RemoveMovieWindow) window).getTable();
+            int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
+            filmy.removeFilm(id, databaseUtil);
+            ((RemoveMovieWindow) window).getRemoveMovieSuccess().setVisible(true);
+        } catch (HibernateException e) {
+            ((RemoveMovieWindow) window).getRemoveMovieError().setVisible(true);
+        }
+        showRemoveMovieWindow();
     }
 
     public void onZwrocFilmButtonClicked() {
@@ -543,8 +553,25 @@ public class MainWindow extends JFrame {
     public void onOdrzucTransakcjeButtonClicked() {
 
         //Odrzuc Transakcje
+         window = windowFactory.getWindow(TRANSACTION);
+        JLabel label = ((TransactionWindow) window).getOutcomeLabel();
+        JTable lista = ((TransactionWindow) window).getTable();                                                         
+        if (lista.getSelectedRow() != -1) {
+            if (lista.getValueAt(lista.getSelectedRow(), 3).toString().equalsIgnoreCase("Wypożyczenie")) {
+                try {
+                    transakcje.removeTransakcja(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
+                    label.setText("Usunięto");
+                    label.setForeground(Color.green);
+                    label.setVisible(true);
+            
+                } catch(HibernateException he) {
+                    label.setText("Błąd");
+                    label.setForeground(Color.red);
+                    label.setVisible(true);                    
+                }
+        }
+        }
     }
-
     public void onZatwierdzTransakcjeButtonClicked() {
 
         //Zatwierdz Transakcje
