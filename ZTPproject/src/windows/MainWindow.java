@@ -1,12 +1,15 @@
 package windows;
 
+import POJO.Film;
 import POJO.Nosnik;
 import POJO.Gatunek;
 import POJO.Rezyser;
+import POJO.Transakcja;
 import Proxy.FilmProxy;
 import Proxy.GatunekProxy;
 import Proxy.NosnikProxy;
 import Proxy.RezyserProxy;
+import Proxy.TransakcjaProxy;
 import displayers.FilmBasic;
 import displayers.FilmDisplayer;
 import java.awt.BorderLayout;
@@ -27,10 +30,13 @@ import org.hibernate.SessionFactory;
 import util.HibernateUtil;
 import util.WindowFactory;
 import java.util.List;
+import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
 import javax.swing.JList;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class MainWindow extends JFrame {
 
@@ -51,6 +57,7 @@ public class MainWindow extends JFrame {
     private FilmDisplayer movieDisplayer;
     private NosnikProxy nosniki;
     private GatunekProxy gatunki;
+    private TransakcjaProxy transakcje;
     private WindowFactory windowFactory;
     private SessionFactory databaseUtil = HibernateUtil.getSessionFactory();
     CustomWindowInterface window;
@@ -60,12 +67,13 @@ public class MainWindow extends JFrame {
         prepareComponents();
     }
 
-    public MainWindow(FilmProxy filmy, RezyserProxy rezyser, FilmDisplayer movieDisplayer, NosnikProxy nosniki, GatunekProxy gatunki, WindowFactory windowFactory) {
+    public MainWindow(FilmProxy filmy, RezyserProxy rezyser, FilmDisplayer movieDisplayer, NosnikProxy nosniki, GatunekProxy gatunki, TransakcjaProxy transakcje, WindowFactory windowFactory) {
         this.filmy = filmy;
         this.rezyser = rezyser;
         this.movieDisplayer = movieDisplayer;
         this.nosniki = nosniki;
         this.gatunki = gatunki;
+        this.transakcje = transakcje;
         this.windowFactory = windowFactory;
 
         prepareMenuBar();
@@ -147,6 +155,44 @@ public class MainWindow extends JFrame {
     public void showTransactionWindow() {
         window = windowFactory.getWindow("TRANSACTION");
         // wypelnienie listy transakcji
+        ((TransactionWindow)window).getOutcomeLabel().setVisible(false);
+        
+        JTable transactions = window.getTable();
+        Vector<String> tableHeaders = new Vector<>();
+        Vector tableData = new Vector<>();
+        tableHeaders.add("Id");
+        tableHeaders.add("Id Klienta");
+        tableHeaders.add("Tytuł Filmu");
+        tableHeaders.add("Data Transakcji");
+        tableHeaders.add("Typ Transakcji");
+
+        for (Transakcja t : transakcje.getEachTransakcja(databaseUtil)) {
+
+            Vector<Object> oneRow = new Vector<>();
+            oneRow.add(t.getIdTransakcji());
+            oneRow.add(t.getIdKlienta());
+            oneRow.add(filmy.getFilm(t.getIdFilmu(), databaseUtil).getTytul());
+            oneRow.add(t.getDataTransakcji());
+            if (t.getTyp().equals("WYP")) {
+                oneRow.add("Wypożyczenie");
+            } else {
+                oneRow.add("Zwrot");
+            }
+
+            tableData.add(oneRow);
+        }
+        System.out.println(transactions);
+        System.out.println(tableData);
+        System.out.println(tableHeaders);
+
+        transactions.setModel(new DefaultTableModel(tableData, tableHeaders) {
+            public boolean isCellEditable(int rowIndex, int mColIndex) {
+                return false;
+            }
+        });
+
+        transactions.removeColumn(transactions.getColumnModel().getColumn(0));
+
     }
 
     private void onDodajFilmClicked(ActionEvent e) {
@@ -336,7 +382,8 @@ public class MainWindow extends JFrame {
         MainWindow mainWindow = new MainWindow(
                 new FilmProxy(), new RezyserProxy(),
                 new FilmBasic(), new NosnikProxy(),
-                new GatunekProxy(), new WindowFactory()
+                new GatunekProxy(), new TransakcjaProxy(),
+                new WindowFactory()
         );
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainWindow.pack();

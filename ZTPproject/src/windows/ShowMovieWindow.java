@@ -14,7 +14,7 @@ import javax.swing.JTable;
 public class ShowMovieWindow extends JPanel implements CustomWindowInterface {
 
     private JTable moviesTable;
-    private JLabel showMovieeError;
+    private JLabel showMovieError;
     private JLabel showMovieSucces;
     private JScrollPane scrollPane;
     private JButton showMovieButton;
@@ -24,6 +24,8 @@ public class ShowMovieWindow extends JPanel implements CustomWindowInterface {
 
         scrollPane = new JScrollPane();
         showMovieButton = new JButton("Zamów film");
+        showMovieError = new JLabel();
+        showMovieSucces = new JLabel();
         moviesTable = new javax.swing.JTable();
         moviesTable.setAutoCreateRowSorter(true);
         this.setLayout(new GridBagLayout());
@@ -41,9 +43,9 @@ public class ShowMovieWindow extends JPanel implements CustomWindowInterface {
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.anchor = GridBagConstraints.LAST_LINE_START;
-        this.add(showMovieeError, constraints);
-        showMovieeError.setVisible(true);
-        showMovieeError.setForeground(new Color(255, 0, 51));
+        this.add(showMovieError, constraints);
+        showMovieError.setVisible(true);
+        showMovieError.setForeground(new Color(255, 0, 51));
 
         //BUTTON
         constraints.gridy = 1;
@@ -80,7 +82,7 @@ public class ShowMovieWindow extends JPanel implements CustomWindowInterface {
     }
 
     public JLabel getShowMovieeError() {
-        return showMovieeError;
+        return showMovieError;
     }
 
     public JLabel getShowMovieSucces() {

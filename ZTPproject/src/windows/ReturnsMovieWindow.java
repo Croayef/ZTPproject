@@ -15,7 +15,7 @@ public class ReturnsMovieWindow extends JPanel implements CustomWindowInterface 
 
     private JTable returnsmoviesTable;
     private JLabel returnsMovieError;
-    private JLabel returnsMovieSucces;
+    private JLabel returnsMovieSuccess;
     private JScrollPane scrollPane;
     private JButton returnsMovieButton;
     private static ReturnsMovieWindow instance;
@@ -25,7 +25,8 @@ public class ReturnsMovieWindow extends JPanel implements CustomWindowInterface 
         returnsMovieButton = new JButton("Zwróć");
         returnsmoviesTable = new javax.swing.JTable();
         returnsmoviesTable.setAutoCreateRowSorter(true);
-
+        returnsMovieError = new JLabel();
+        returnsMovieSuccess = new JLabel();
         this.setLayout(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.WEST;
@@ -55,9 +56,9 @@ public class ReturnsMovieWindow extends JPanel implements CustomWindowInterface 
         //SUCCESS LABEL
         constraints.gridx = 2;
         constraints.anchor = GridBagConstraints.LAST_LINE_END;
-        this.add(returnsMovieSucces, constraints);
-        returnsMovieSucces.setVisible(true);
-        returnsMovieSucces.setForeground(new Color(0, 204, 0));
+        this.add(returnsMovieSuccess, constraints);
+        returnsMovieSuccess.setVisible(true);
+        returnsMovieSuccess.setForeground(new Color(0, 204, 0));
         
         
         // BORDER
@@ -85,7 +86,7 @@ public class ReturnsMovieWindow extends JPanel implements CustomWindowInterface 
     }
 
     public JLabel getReturnsMovieSucces() {
-        return returnsMovieSucces;
+        return returnsMovieSuccess;
     }
     
     
