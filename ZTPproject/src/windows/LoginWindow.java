@@ -56,10 +56,9 @@ public class LoginWindow extends JPanel implements CustomWindowInterface {
         this.add(passField, constraints);
 
         // ERROR LABEL
-        constraints.gridx = 0;
+        constraints.gridx = 1;
         constraints.gridy = 3;
-        constraints.gridwidth = 2;
-        constraints.anchor = GridBagConstraints.LAST_LINE_START;
+        constraints.anchor = GridBagConstraints.LAST_LINE_END;
         this.add(errorField, constraints);
         errorField.setVisible(true);
         errorField.setForeground(new Color(255, 0, 51));
@@ -68,7 +67,7 @@ public class LoginWindow extends JPanel implements CustomWindowInterface {
         constraints.gridx = 0;
         constraints.gridy = 2;
         constraints.gridwidth = 2;
-        constraints.anchor = GridBagConstraints.LAST_LINE_END;
+        constraints.anchor = GridBagConstraints.EAST;
         this.add(loginButton, constraints);
 
         // BORDER

@@ -65,6 +65,7 @@ public class MainWindow extends JFrame {
     private PracownikProxy pracownicy;
     private WindowFactory windowFactory;
     private SessionFactory databaseUtil = HibernateUtil.getSessionFactory();
+    JMenuBar menuBar;
     CustomWindowInterface window;
 
     public MainWindow() {
@@ -98,7 +99,7 @@ public class MainWindow extends JFrame {
     }
 
     private void prepareMenuBar() {
-        JMenuBar menuBar = new JMenuBar();
+        menuBar = new JMenuBar();
         JMenu transakcje = new JMenu("Transakcje");
         transakcje.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent evt) {
@@ -160,6 +161,7 @@ public class MainWindow extends JFrame {
         menuBar.add(bazaFilmow);
         menuBar.add(wyloguj);
         this.setJMenuBar(menuBar);
+        menuBar.setVisible(false);
     }
 
     private void onTransakcjeClicked(MouseEvent e) {
@@ -183,19 +185,20 @@ public class MainWindow extends JFrame {
         tableHeaders.add("Typ Transakcji");
 
         for (Transakcja t : transakcje.getEachTransakcja(databaseUtil)) {
+            if (t.getIdPracownika() == null) {
+                Vector<Object> oneRow = new Vector<>();
+                oneRow.add(t.getIdTransakcji());
+                oneRow.add(t.getIdKlienta());
+                oneRow.add(filmy.getFilm(t.getIdFilmu(), databaseUtil).getTytul());
+                oneRow.add(t.getDataTransakcji());
+                if (t.getTyp().equals("WYP")) {
+                    oneRow.add("Wypożyczenie");
+                } else {
+                    oneRow.add("Zwrot");
+                }
 
-            Vector<Object> oneRow = new Vector<>();
-            oneRow.add(t.getIdTransakcji());
-            oneRow.add(t.getIdKlienta());
-            oneRow.add(filmy.getFilm(t.getIdFilmu(), databaseUtil).getTytul());
-            oneRow.add(t.getDataTransakcji());
-            if (t.getTyp().equals("WYP")) {
-                oneRow.add("Wypożyczenie");
-            } else {
-                oneRow.add("Zwrot");
+                tableData.add(oneRow);
             }
-
-            tableData.add(oneRow);
         }
         transactions.setModel(new DefaultTableModel(tableData, tableHeaders) {
             public boolean isCellEditable(int rowIndex, int mColIndex) {
@@ -306,6 +309,7 @@ public class MainWindow extends JFrame {
         windowFactory.getWindow("LOGIN").clear();
         this.user = 0;
         this.role = -1;
+        menuBar.setVisible(false);
         ((CardLayout) cards.getLayout()).show(cards, LOGIN);
     }
 
@@ -320,8 +324,8 @@ public class MainWindow extends JFrame {
         cards.add((JPanel) card, LOGIN);
 
         card = windowFactory.getWindow(WELCOME);
-        cards.add((JPanel)card, WELCOME);
-        
+        cards.add((JPanel) card, WELCOME);
+
         card = windowFactory.getWindow(SHOW_MOVIE);
         ((ShowMovieWindow) card).getShowMovieButton().addActionListener((ActionEvent e) -> {
             onZamowButtonClicked();
@@ -403,10 +407,13 @@ public class MainWindow extends JFrame {
                 ((LoginWindow) window).getErrorField().setVisible(true);
             } else {
                 ((CardLayout) cards.getLayout()).show(cards, WELCOME);
+                menuBar.setVisible(true);
             }
         } else {
             ((LoginWindow) window).getErrorField().setVisible(true);
         }
+       
+        ((JPanel)window).revalidate();
     }
 
     public void onZamowButtonClicked() {
@@ -432,11 +439,10 @@ public class MainWindow extends JFrame {
     public void onDodajGatunekButtonClicked() {
 
         window = windowFactory.getWindow(ADD_GENRE);
-        
-        if(((AddGenreWindow)window).getNewGenreNameTextField()!= null )
-        {
+
+        if (((AddGenreWindow) window).getNewGenreNameTextField() != null) {
             Gatunek g = new Gatunek();
-            g.setNazwa(((AddGenreWindow)window).getNewGenreNameTextField().getText());
+            g.setNazwa(((AddGenreWindow) window).getNewGenreNameTextField().getText());
             gatunki.addGatunek(g, databaseUtil);
         }
     }
@@ -444,19 +450,19 @@ public class MainWindow extends JFrame {
     public void onUsunGatunekButtonClicked() {
 
         window = windowFactory.getWindow(REMOVE_GENRE);
-        JLabel out = ((RemoveGenreWindow)window).getRemoveGenreLabel();
-        
-        try{
-        JTable lista = ((RemoveGenreWindow)window).getRemoveGenreTable();
-        int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
-        gatunki.removeGatunek(id, databaseUtil);
-        out.setText("Pomyślnie usunięto gatunek!");
-        out.setForeground(Color.green);
+        JLabel out = ((RemoveGenreWindow) window).getRemoveGenreLabel();
+
+        try {
+            JTable lista = ((RemoveGenreWindow) window).getRemoveGenreTable();
+            int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
+            gatunki.removeGatunek(id, databaseUtil);
+            out.setText("Pomyślnie usunięto gatunek!");
+            out.setForeground(Color.green);
         } catch (HibernateException e) {
             out.setText("Nie można usunąć gatunku!");
             out.setForeground(Color.red);
         }
-        ((RemoveGenreWindow)window).getRemoveGenreLabel().setVisible(true);
+        ((RemoveGenreWindow) window).getRemoveGenreLabel().setVisible(true);
         showRemoveGenreWindow();
     }
 
@@ -468,35 +474,35 @@ public class MainWindow extends JFrame {
     public void onZatwierdzTransakcjeButtonClicked() {
 
         //Zatwierdz Transakcje
-         window = windowFactory.getWindow(TRANSACTION);
-         JLabel label = ((TransactionWindow)window).getOutcomeLabel();
-          JTable lista = ((TransactionWindow)window).getTable();
-        if (lista.getSelectedRow() != -1)
-        {
+        window = windowFactory.getWindow(TRANSACTION);
+        JLabel label = ((TransactionWindow) window).getOutcomeLabel();
+        JTable lista = ((TransactionWindow) window).getTable();
+        if (lista.getSelectedRow() != -1) {
             if (lista.getValueAt(lista.getSelectedRow(), 3).toString().equalsIgnoreCase("Wypożyczenie")) {
                 try {
-                   Transakcja transakcja= transakcje.getTransakcja(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
-                   transakcja.setIdTransakcji(user);
+                    Transakcja transakcja = transakcje.getTransakcja(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
+                    transakcja.setIdPracownika(user);
                     transakcje.editTransakcja(transakcja, databaseUtil);
                     label.setText("Zatwierdzono");
                     label.setForeground(Color.green);
                     label.setVisible(true);
-                }
-                  catch (HibernateException he) {
+                } catch (HibernateException he) {
                     he.printStackTrace();
                     label.setText("Błąd");
                     label.setForeground(Color.red);
                     label.setVisible(true);
                 }
             }
-            
+            showTransactionWindow();
         }
-        
+
     }
 
     public static void main(String[] args) {
         MainWindow mainWindow = new MainWindow();
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainWindow.setSize(800, 800);
+        mainWindow.setResizable(false);
         mainWindow.pack();
         mainWindow.setVisible(true);
     }
