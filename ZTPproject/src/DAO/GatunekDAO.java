@@ -4,6 +4,8 @@ import POJO.Gatunek;
 
 import DAOInterfaces.GatunekDAOInterface;
 import java.util.List;
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -18,13 +20,19 @@ public class GatunekDAO implements GatunekDAOInterface {
         session.close();
     }
 
-    public void removeGatunek(int id, SessionFactory sessionFactory) {
+    public void removeGatunek(int id, SessionFactory sessionFactory) throws HibernateException{
         Session session = sessionFactory.openSession();
         Transaction transaction = session.beginTransaction();
-        Gatunek gatunek = (Gatunek) session.get(Gatunek.class, id);
-        session.delete(gatunek);
-        transaction.commit();
-        session.close();
+        try {
+            Query query = session.createQuery("delete Gatunek where idGatunku =:id");
+            query.setParameter("id", id);
+            query.executeUpdate();
+        } catch (HibernateException e) {
+            throw new HibernateException("Nie pykło");
+        } finally {
+            transaction.commit();
+            session.close();
+        }
     }
 
     public void editGatunek(Gatunek gatunek, SessionFactory sessionFactory) {

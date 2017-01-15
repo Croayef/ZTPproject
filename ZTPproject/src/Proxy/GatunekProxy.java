@@ -3,6 +3,7 @@ import DAO.GatunekDAO;
 import DAOInterfaces.GatunekDAOInterface;
 import POJO.Gatunek;
 import java.util.List;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
 public class GatunekProxy implements GatunekDAOInterface {
@@ -18,7 +19,7 @@ public class GatunekProxy implements GatunekDAOInterface {
     }
 
   
-    public void removeGatunek(int id, SessionFactory sessionFactory) {
+    public void removeGatunek(int id, SessionFactory sessionFactory) throws HibernateException{
         this.gatunek.removeGatunek(id, sessionFactory);
     }
 

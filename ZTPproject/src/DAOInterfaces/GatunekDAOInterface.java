@@ -2,13 +2,14 @@ package DAOInterfaces;
 
 import POJO.Gatunek;
 import java.util.List;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 
 public interface GatunekDAOInterface {
 
     public void addGatunek(Gatunek gatunek, SessionFactory sessionFactory);
 
-    public void removeGatunek(int id, SessionFactory sessionFactory);
+    public void removeGatunek(int id, SessionFactory sessionFactory) throws HibernateException;
 
     public void editGatunek(Gatunek gatunek, SessionFactory sessionFactory);
 

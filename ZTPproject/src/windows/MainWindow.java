@@ -17,6 +17,7 @@ import displayers.FilmBasic;
 import displayers.FilmDisplayer;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -32,9 +33,11 @@ import util.WindowFactory;
 import java.util.Vector;
 import javax.swing.DefaultListModel;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import org.hibernate.HibernateException;
 
 public class MainWindow extends JFrame {
 
@@ -441,10 +444,19 @@ public class MainWindow extends JFrame {
     public void onUsunGatunekButtonClicked() {
 
         window = windowFactory.getWindow(REMOVE_GENRE);
+        JLabel out = ((RemoveGenreWindow)window).getRemoveGenreLabel();
         
+        try{
         JTable lista = ((RemoveGenreWindow)window).getRemoveGenreTable();
         int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
         gatunki.removeGatunek(id, databaseUtil);
+        out.setText("Pomyślnie usunięto gatunek!");
+        out.setForeground(Color.green);
+        } catch (HibernateException e) {
+            out.setText("Nie można usunąć gatunku!");
+            out.setForeground(Color.red);
+        }
+        ((RemoveGenreWindow)window).getRemoveGenreLabel().setVisible(true);
         showRemoveGenreWindow();
     }
 
