@@ -107,7 +107,11 @@ public class AddMovieWindow extends JPanel implements CustomWindowInterface {
         constraints.gridheight = 3;
         constraints.anchor = GridBagConstraints.NORTHWEST;
         constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx=1;
+        constraints.weighty=1;
         this.add(genreListScrollPane, constraints);
+        constraints.weightx=0;
+        constraints.weighty=0;
         constraints.gridy = 4;
         constraints.gridwidth = 1;
         constraints.gridheight = 1;

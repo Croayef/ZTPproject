@@ -29,17 +29,22 @@ public class ShowMovieWindow extends JPanel implements CustomWindowInterface {
         constraints.anchor = GridBagConstraints.WEST;
         constraints.insets = new Insets(10, 10, 10, 10);
 
-        // SCROLL VIEWER
-        constraints.gridx = 1;
-        constraints.gridy = 0;
-        this.add(scrollPane, constraints);
-        scrollPane.setViewportView(moviesTable);
+
 
         //BUTTON
         constraints.gridy = 1;
         constraints.gridx = 1;
         constraints.anchor = GridBagConstraints.PAGE_END;
         this.add(showMovieButton, constraints);
+        
+        // SCROLL VIEWER
+        constraints.gridx = 1;
+        constraints.gridy = 0;
+        constraints.weightx=1;
+        constraints.weighty=1;
+       constraints.fill=GridBagConstraints.BOTH;
+        this.add(scrollPane, constraints);
+        scrollPane.setViewportView(moviesTable);
 
         // BORDER
         this.setBorder(BorderFactory.createTitledBorder(

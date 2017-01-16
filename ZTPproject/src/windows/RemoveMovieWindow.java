@@ -31,10 +31,15 @@ public class RemoveMovieWindow extends JPanel implements CustomWindowInterface {
         // SCROLL VIEWER
         constraints.gridx = 1;
         constraints.gridy = 0;
+        constraints.weightx=1;
+        constraints.weighty=1;
+        constraints.fill = GridBagConstraints.BOTH;        
         this.add(scrollPane, constraints);
         scrollPane.setViewportView(removemovieTable);
         
         //BUTTON
+        constraints.weightx=0;
+        constraints.weighty=0;        
         constraints.gridy = 1;
         constraints.gridx = 1;
         constraints.anchor = GridBagConstraints.PAGE_END;

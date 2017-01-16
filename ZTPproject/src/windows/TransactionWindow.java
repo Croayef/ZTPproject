@@ -39,7 +39,12 @@ public class TransactionWindow extends JPanel implements CustomWindowInterface {
         constraints.gridy = 0;
         constraints.gridwidth = 3;
         constraints.gridheight = 1;
+        constraints.weightx=1;
+        constraints.weighty=1;
+        constraints.fill = GridBagConstraints.BOTH;   
         this.add(transactionScrollPane, constraints);
+        constraints.weightx=0;
+        constraints.weighty=0;   
         constraints.gridx = 0;
         constraints.gridy = 1;
         constraints.gridwidth = 1;
