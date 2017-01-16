@@ -304,7 +304,7 @@ public class MainWindow extends JFrame {
 
     private void showRemoveGenreWindow() {
         window = windowFactory.getWindow("REMOVE_GENRE");
-        JTable genres = ((RemoveGenreWindow) window).getRemoveGenreTable();
+        JTable genres = ((RemoveGenreWindow) window).getTable();
         genres.removeAll();
         Vector<String> tableHeaders = new Vector<>();
         Vector tableData = new Vector<>();
@@ -349,16 +349,48 @@ public class MainWindow extends JFrame {
         window = windowFactory.getWindow(RETURN_MOVIE);
         int x = role;
         role = 2;
-        List<Transakcja> transcations = transakcje.getEachTransakcja(databaseUtil);
-        List<Film> movies = new ArrayList<>();
-        for (Iterator<Transakcja> iter = transcations.listIterator(); iter.hasNext();) {
-            Transakcja transakcja = iter.next();
-            if (transakcja.getIdKlienta() == user && "WYP".equals(transakcja.getTyp())) {
-                movies.add(filmy.getFilm(transakcja.getIdFilmu(), databaseUtil));
+        Vector<String> tableHeaders = new Vector<>();
+        tableHeaders.add("IdTransakcji");
+        tableHeaders.add("IdFilmu");
+        tableHeaders.add("Tytuł");
+        tableHeaders.add("Rok Produkcji");
+        tableHeaders.add("Reżyser");
+        tableHeaders.add("Nośnik");
+        
+        Vector tableData = new Vector();
+        for (Transakcja t : transakcje.getEachTransakcja(databaseUtil)) {
+            if (t.getIdKlienta() == user && "WYP".equalsIgnoreCase(t.getTyp()) && t.getIdPracownika() != null) {
+                Vector<Object> oneRow = new Vector<>();
+                Film f = filmy.getFilm(t.getIdFilmu(), databaseUtil);
+                oneRow.add(t.getIdTransakcji());
+                oneRow.add(f.getIdFilmu());
+                oneRow.add(f.getTytul());
+                oneRow.add(f.getRokProdukcji());
+                for (Rezyser r : rezyser.getEachRezyser(databaseUtil)) {
+                    if (r.getIdRezysera() == f.getIdRezysera()) {
+                        oneRow.add(r.getNazwisko());
+                        break;
+                    }
+                }
+                for (Nosnik n : nosniki.getEachNosnik(databaseUtil)) {
+                    if (n.getIdNosnika() == f.getIdNosnika()) {
+                        oneRow.add(n.getTyp());
+                        break;
+                    }
+                }
+                tableData.add(oneRow);
             }
         }
-
         role = x;
+        
+        window.getTable().setModel(new DefaultTableModel(tableData, tableHeaders){
+            public boolean isCellEditable(int rowIndex, int mColIndex) {
+                return false;
+            }
+        });
+        window.getTable().removeColumn(window.getTable().getColumnModel().getColumn(0));
+        window.getTable().removeColumn(window.getTable().getColumnModel().getColumn(0));
+        
     }
 
     private void onWylogujClicked(MouseEvent e) {
@@ -502,6 +534,7 @@ public class MainWindow extends JFrame {
 
                 }
             }
+            showMovieWindow();
         }
     }
 
@@ -594,19 +627,18 @@ public class MainWindow extends JFrame {
         window = windowFactory.getWindow(RETURN_MOVIE);
         JTable lista = ((ReturnsMovieWindow) window).getTable();
         if (lista.getSelectedRow() != -1) {
-
             try {
                 Transakcja t = new Transakcja();
                 t.setIdKlienta(user);
-                t.setIdFilmu(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()));
-                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                t.setIdFilmu(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 1).toString()));
                 Date date = new Date();
                 t.setDataTransakcji(date);
                 t.setTyp("ZW");
                 transakcje.addTransakcja(t, databaseUtil);
-                Film film = filmy.getFilm(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
+                Film film = filmy.getFilm(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 1).toString()), databaseUtil);
                 film.setIlosc(film.getIlosc() + 1);
                 filmy.editFilm(film, databaseUtil);
+                transakcje.removeTransakcja(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
                 JOptionPane.showMessageDialog(this, "Zwrócono film", "Komunikat", JOptionPane.INFORMATION_MESSAGE);
             } catch (HibernateException he) {
                 he.printStackTrace();
@@ -632,7 +664,7 @@ public class MainWindow extends JFrame {
     public void onUsunGatunekButtonClicked() {
         window = windowFactory.getWindow(REMOVE_GENRE);
         try {
-            JTable lista = ((RemoveGenreWindow) window).getRemoveGenreTable();
+            JTable lista = ((RemoveGenreWindow) window).getTable();
             int id = Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString());
             gatunki.removeGatunek(id, databaseUtil);
             JOptionPane.showMessageDialog(this, "Pomyślnie usunięto gatunek!", "Komunikat", JOptionPane.INFORMATION_MESSAGE);

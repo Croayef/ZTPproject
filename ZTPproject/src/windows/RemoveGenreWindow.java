@@ -53,7 +53,7 @@ public class RemoveGenreWindow extends JPanel implements CustomWindowInterface {
         return instance;
     }
 
-    public JTable getRemoveGenreTable() {
+    public JTable getTable() {
         return removegenreTable;
     }
     
