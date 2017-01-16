@@ -79,7 +79,8 @@ public class MainWindow extends JFrame {
     private KlientProxy klienci;
     private PracownikProxy pracownicy;
     private WindowFactory windowFactory;
-    private SessionFactory databaseUtil = HibernateUtil.getSessionFactory();
+    private HibernateUtil hibernateUtil = HibernateUtil.getInstance();
+    private SessionFactory databaseUtil;
     JMenuBar menuBar;
     JMenuItem showWypozyczone;
     CustomWindowInterface window;
@@ -97,6 +98,7 @@ public class MainWindow extends JFrame {
         this.windowFactory = new WindowFactory();
         this.gatunkiFilmy = new GatunekFilmProxy();
         instance = this;
+        databaseUtil = hibernateUtil.getSessionFactory();
         prepareMenuBar();
         prepareComponents();
     }
@@ -113,6 +115,7 @@ public class MainWindow extends JFrame {
         this.klienci = new KlientProxy();
         this.pracownicy = new PracownikProxy();
         this.windowFactory = new WindowFactory();
+        databaseUtil = hibernateUtil.getSessionFactory();
         instance = this;
         prepareMenuBar();
         prepareComponents();
@@ -461,6 +464,9 @@ public class MainWindow extends JFrame {
         cards.add((JPanel) card, TRANSACTION);
 
         this.add(cards, BorderLayout.CENTER);
+        
+        this.setTitle("MovieRental");
+        
     }
 
     public void onZalogujButtonClicked() {
@@ -679,7 +685,7 @@ public class MainWindow extends JFrame {
         window = windowFactory.getWindow(TRANSACTION);
         JTable lista = ((TransactionWindow) window).getTable();
         if (lista.getSelectedRow() != -1) {
-            if (lista.getValueAt(lista.getSelectedRow(), 3).toString().equalsIgnoreCase("Wypożyczenie")) {
+            if (lista.getValueAt(lista.getSelectedRow(), 3).toString().equalsIgnoreCase("Wypożyczenie")  || lista.getValueAt(lista.getSelectedRow(), 3).toString().equalsIgnoreCase("Zwrot")) {
                 try {
                     transakcje.removeTransakcja(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
                     JOptionPane.showMessageDialog(this, "Usunięto", "Komunikat", JOptionPane.INFORMATION_MESSAGE);
@@ -698,7 +704,7 @@ public class MainWindow extends JFrame {
         window = windowFactory.getWindow(TRANSACTION);
         JTable lista = ((TransactionWindow) window).getTable();
         if (lista.getSelectedRow() != -1) {
-            if (lista.getValueAt(lista.getSelectedRow(), 3).toString().equalsIgnoreCase("Wypożyczenie")) {
+            if (lista.getValueAt(lista.getSelectedRow(), 3).toString().equalsIgnoreCase("Wypożyczenie") || lista.getValueAt(lista.getSelectedRow(), 3).toString().equalsIgnoreCase("Zwrot")) {
                 try {
                     Transakcja transakcja = transakcje.getTransakcja(Integer.parseInt(lista.getModel().getValueAt(lista.getSelectedRow(), 0).toString()), databaseUtil);
                     transakcja.setIdPracownika(user);

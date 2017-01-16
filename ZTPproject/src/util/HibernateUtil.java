@@ -5,9 +5,10 @@ import org.hibernate.SessionFactory;
 
 public class HibernateUtil {
 
-    private static final SessionFactory sessionFactory;
-
-    static {
+    private SessionFactory sessionFactory;
+    private static HibernateUtil instance;
+    
+    private HibernateUtil() {
         try {
             sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
         } catch (Throwable ex) {
@@ -15,8 +16,18 @@ public class HibernateUtil {
             throw new ExceptionInInitializerError(ex);
         }
     }
+    
 
-    public static SessionFactory getSessionFactory() {
+    public SessionFactory getSessionFactory() {
         return sessionFactory;
     }
+    
+    public static HibernateUtil getInstance() {
+        
+        if(instance == null) {
+            instance = new HibernateUtil();
+        }
+        return instance;
+    }
+    
 }
